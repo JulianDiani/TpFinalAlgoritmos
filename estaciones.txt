@@ -1,8 +1,8 @@
-5 roma
-5 varela
-33 Madrid
-77 Florida
-567 lomas
-123 cordoba
-999 lalala
-678 atlantis
+BAS001 Estacion01 BsAs 4 80 SUP
+BAS001 Estacion02 BsAs 3 70 INF
+BAS001 Estacion03 BsAs 4 80 SUP
+BAS001 Estacion04 BsAs 4 80 SUP
+BAS001 Estacion05 BsAs 4 80 SUP
+BAS001 Estacion06 BsAs 4 80 SUP
+BAS001 Estacion07 BsAs 4 80 SUP
+
