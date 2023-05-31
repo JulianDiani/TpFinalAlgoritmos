@@ -30,6 +30,12 @@ vector<Estaciones> tablaHashing(tamanioDeTabla);     // Tabla de hashing
 bool verificarTipoComb (string tipo) {
     return tipo == "SUP" || tipo == "INF" || tipo == "NIT";
 }
+bool verificarCodigo(string codigo){
+    return codigo.size()==6;
+}
+void mostrarDatosEstacion(Estaciones estacion){
+    cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores"<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
+}
 
 // Funciones de hashing
 // Hashing Modulo
@@ -144,15 +150,14 @@ void cargarEstacionesIniciales()
     }
 }
 
+
 //Dar de alta acomodar con hashing
 void darDeAltaEstacionV2(){
-    // string codigo,nombre,ciudad,tipoCombustible;
-    // int cantSurtidores,litrosSurtidor;
     Estaciones estacionNueva;
     
     cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
     cin >> estacionNueva.codigo;
-    while (estacionNueva.codigo.size() != 6) {
+    while (!verificarCodigo(estacionNueva.codigo)) {
         cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
         cin >> estacionNueva.codigo;
     }
@@ -170,16 +175,54 @@ void darDeAltaEstacionV2(){
     cin >> estacionNueva.cantSurtidores;
     cout << "Ingrese los litros que tiene cada surtidor: " << endl;
     cin >> estacionNueva.litrosSurtidor;
-    // estacionNueva.codigo = codigo;
-    // estacionNueva.nombre = nombre;
-    // estacionNueva.ciudad = ciudad;
-    // estacionNueva.cantSurtidores = cantSurtidores;
-    // estacionNueva.litrosSurtidor = litrosSurtidor;
-    // estacionNueva.tipoCombustible = tipoCombustible;
     cout << "Todos los datos fueron ingresados correctamente" << endl;
 
     //Insercion
     insertarEstacion(estacionNueva, tamanioDeTabla);
+}
+void buscarEstacion(string codigo,int tamanio){
+     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
+     Estaciones estacionAux;
+     cout<<"Codigo"<<codigo<<endl;
+     estacionAux=tablaHashing[posicionInicial];
+        if (!noEstaOcupado(posicionInicial) && estacionAux.codigo==codigo)
+        {
+            //Sumar el codigo agregado al txt
+            //tablaHashing.insert(tablaHashing.begin() + posicionInicial, estacion);
+            
+            cout <<"La estacion encontrada es: "<<endl;
+            mostrarDatosEstacion(estacionAux);
+        }
+        else if(!noEstaOcupado(posicionInicial)){
+            posicionColision = tratarColision(posicionInicial, tamanio);
+            if (posicionColision != (-1)){
+                //Sumar el codigo agregado al txt
+                //ablaHashing.insert(tablaHashing.begin() + posicionColision, estacion);
+                cout <<"La estacion encontrada es: "<<endl;
+                mostrarDatosEstacion(estacionAux);
+            }
+            else{
+                cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
+            }
+        }else{
+            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+        }
+
+}
+void buscarEstacionPorCodigoV2(){  //// PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO SOLO O POR NOMBRE TAMBIEN
+    string codigo;
+    bool encontrado=false;
+    cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
+    cin>>codigo;
+    while(!verificarCodigo(codigo)){///AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+        cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cin>>codigo;
+    }
+    buscarEstacion(codigo,tamanioDeTabla);
+    
+
+
+
 }
 
 void buscarEstacionPorCodigo()
@@ -329,7 +372,8 @@ void mostrarMenu()
         cin >> opc;
         if (opc == '1')
         {
-            buscarEstacionPorCodigo();
+            //buscarEstacionPorCodigo();
+            buscarEstacionPorCodigoV2();
             opc = deseaContinuar();
         }
         else if (opc == '2')

@@ -4,5 +4,5 @@ BAS001 Estacion03 BsAs 4 80 SUP
 BAS001 Estacion04 BsAs 4 80 SUP
 BAS001 Estacion05 BsAs 4 80 SUP
 BAS001 Estacion06 BsAs 4 80 SUP
-BAS001 Estacion07 BsAs 4 80 SUP
+BAS007 Estacion07 BsAs 4 80 SUP
 
