@@ -8,8 +8,8 @@
 
 using namespace std;
 
-int keyTotals = 100; // Tamaño de registros estimados
-int tableLen = 127;  // Tamaño de tabla
+int cantidadDeClaves = 100; // Tamaño de registros estimados
+int tamanioDeTabla = 127;  // Tamaño de tabla
 
 // Estructura de estaciones
 struct Estaciones
@@ -24,7 +24,7 @@ struct Estaciones
 };
 
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
-vector<Estaciones> tablaHashing(tableLen);     // Tabla de hashing
+vector<Estaciones> tablaHashing(tamanioDeTabla);     // Tabla de hashing
 
 //Funciones auxiliares
 bool verificarTipoComb (string tipo) {
@@ -33,7 +33,7 @@ bool verificarTipoComb (string tipo) {
 
 // Funciones de hashing
 // Hashing Modulo
-int functionModulo(int key, int tamanio)
+int funcionModulo(int key, int tamanio)
 {
     return key % tamanio;
 }
@@ -41,7 +41,7 @@ int functionModulo(int key, int tamanio)
 // Hashing Folding ultimos 3 + Divicion
 // Devuele posicion
 
-int functionDeHashing(string codigo, int tamanio)
+int funcionDeHashing(string codigo, int tamanio)
 {
     int salida = 0, posicion;
     for (int i = codigo.size() - 3; i < codigo.size(); i++)
@@ -49,7 +49,7 @@ int functionDeHashing(string codigo, int tamanio)
         salida += codigo[i];
         // cout <<"Salida= "<< salida <<"Codigo= "<< codigo[i] << endl;
     }
-    posicion = functionModulo(salida, tamanio);
+    posicion = funcionModulo(salida, tamanio);
     return posicion;
 }
 
@@ -58,9 +58,9 @@ bool noEstaOcupado(int posicion)
     return tablaHashing[posicion].codigo.empty();
 }
 
-// Colicion Quadratic probing
+// Colision Quadratic probing
 // Si da -1 no encontro posicion
-int functionHashingCollision(int posicion, int tamanio)
+int tratarColision(int posicion, int tamanio)
 {
     int posicionAux, salida = -1;
     for (int i = 1; i < tamanio; i++)
@@ -77,9 +77,9 @@ int functionHashingCollision(int posicion, int tamanio)
 }
 
 // Insercion
-void funtionDeInsertion(Estaciones estacion, int tamanio)
+void insertarEstacion(Estaciones estacion, int tamanio)
 {
-    int posicionColision, posicionInicial = functionDeHashing(estacion.codigo, tamanio);
+    int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
     if (noEstaOcupado(posicionInicial))
     {
         //Sumar el codigo agregado al txt
@@ -88,7 +88,7 @@ void funtionDeInsertion(Estaciones estacion, int tamanio)
     }
     else
     {
-        posicionColision = functionHashingCollision(posicionInicial, tamanio);
+        posicionColision = tratarColision(posicionInicial, tamanio);
         if (posicionColision != (-1))
         {
             //Sumar el codigo agregado al txt
@@ -100,7 +100,7 @@ void funtionDeInsertion(Estaciones estacion, int tamanio)
             cout << "No se pudo insertar la estacion en ningun lugar" << endl;
         }
     }
-    cout << "Estaciones registrada" << endl;
+    cout << "Estacion registrada correctamente" << endl;
 }
 
 // Cargar estaciones desde el txt.
@@ -134,7 +134,7 @@ void cargarEstacionesIniciales()
                 estacionNueva.litrosSurtidor = litrosSurtidor;
                 estacionNueva.tipoCombustible = tipoCombustible;
             }
-            funtionDeInsertion(estacionNueva, tableLen);
+            insertarEstacion(estacionNueva, tamanioDeTabla);
         }
         archivo.close();
     }
@@ -146,40 +146,40 @@ void cargarEstacionesIniciales()
 
 //Dar de alta acomodar con hashing
 void darDeAltaEstacionV2(){
-    string codigo,nombre,ciudad,tipoCombustible;
-    int cantSurtidores,litrosSurtidor;
+    // string codigo,nombre,ciudad,tipoCombustible;
+    // int cantSurtidores,litrosSurtidor;
     Estaciones estacionNueva;
     
     cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
-    cin >> codigo;
-    while (codigo.size() == 6) {
+    cin >> estacionNueva.codigo;
+    while (estacionNueva.codigo.size() != 6) {
         cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
-        cin >> codigo;
+        cin >> estacionNueva.codigo;
     }
     cout << "Ingrese el nombre: " << endl;
-    cin >> nombre;
+    cin >> estacionNueva.nombre;
     cout << "Ingrese la ciudad: " << endl;
-    cin >> ciudad;
+    cin >> estacionNueva.ciudad;
     cout << "Ingrese el tipo de combustible: " << endl;
-    cin >> tipoCombustible;
-    while (not verificarTipoComb(tipoCombustible)) {
+    cin >> estacionNueva.tipoCombustible;
+    while (!verificarTipoComb(estacionNueva.tipoCombustible)) {  // ACA CAMBIO EL NOT POR EL !, PROBAR SI ANDA XD
         cout << "Los tipos de combustible validos son SUP-INF-NIT : " << endl;
-        cin >> tipoCombustible;
+        cin >> estacionNueva.tipoCombustible;
     }
     cout << "Ingrese la cantidad de surtidores: " << endl;
-    cin >> cantSurtidores;
+    cin >> estacionNueva.cantSurtidores;
     cout << "Ingrese los litros que tiene cada surtidor: " << endl;
-    cin >> litrosSurtidor;
-    estacionNueva.codigo = codigo;
-    estacionNueva.nombre = nombre;
-    estacionNueva.ciudad = ciudad;
-    estacionNueva.cantSurtidores = cantSurtidores;
-    estacionNueva.litrosSurtidor = litrosSurtidor;
-    estacionNueva.tipoCombustible = tipoCombustible;
+    cin >> estacionNueva.litrosSurtidor;
+    // estacionNueva.codigo = codigo;
+    // estacionNueva.nombre = nombre;
+    // estacionNueva.ciudad = ciudad;
+    // estacionNueva.cantSurtidores = cantSurtidores;
+    // estacionNueva.litrosSurtidor = litrosSurtidor;
+    // estacionNueva.tipoCombustible = tipoCombustible;
     cout << "Todos los datos fueron ingresados correctamente" << endl;
 
     //Insercion
-    funtionDeInsertion(estacionNueva, tableLen);
+    insertarEstacion(estacionNueva, tamanioDeTabla);
 }
 
 void buscarEstacionPorCodigo()
@@ -361,7 +361,8 @@ void deseaSeguir()
 int main()
 {   
     cargarEstacionesIniciales();
-    //mostrarMenu();
+    //darDeAltaEstacionV2();
+    mostrarMenu();
     // leerEstaciones();
     return 0;
 }
