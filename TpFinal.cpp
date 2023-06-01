@@ -60,13 +60,15 @@ int funcionDeHashing(string codigo, int tamanio)
 }
 
 bool noEstaOcupado(int posicion)
-{
+{   
+    //cout << "Estoy ocupado " << tablaHashing[posicion].codigo << endl;
     return tablaHashing[posicion].codigo.empty();
 }
 
 // Colision Quadratic probing
 // Si da -1 no encontro posicion
-int tratarColision(int posicion, int tamanio)
+// Tratamiento colicion para insertar
+int tratarColisionInsertar(int posicion, int tamanio)
 {
     int posicionAux, salida = -1;
     for (int i = 1; i < tamanio; i++)
@@ -75,9 +77,25 @@ int tratarColision(int posicion, int tamanio)
         if (noEstaOcupado(posicionAux))
         {
             salida = posicionAux;
-            // tablaHashing.insert(tablaHashing.begin()+posicionAux,estacion);
             break;
         }
+    }
+    return salida;
+}
+
+// Tratamiento colicion para buscar
+int tratarColisionBuscar(int posicion, int tamanio, string codigo)
+{
+    int posicionAux,i = 1, salida = -1;
+    Estaciones datoAComparar;
+    while (!noEstaOcupado(posicionAux) || i < tamanio) {           
+        datoAComparar = tablaHashing[posicionAux];
+        if (datoAComparar.codigo == codigo) {
+            salida = posicionAux;
+            break;
+        }
+        i += 1;
+        posicionAux += i * i;
     }
     return salida;
 }
@@ -86,19 +104,20 @@ int tratarColision(int posicion, int tamanio)
 void insertarEstacion(Estaciones estacion, int tamanio)
 {
     int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
+    //cout << "Pos ini" << posicionInicial << endl;
     if (noEstaOcupado(posicionInicial))
     {
-        //Sumar el codigo agregado al txt
-        tablaHashing.insert(tablaHashing.begin() + posicionInicial, estacion);
-        cout << "Soy la estacion: " << estacion.nombre << "Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
+        //Sumar el codigo agregado al txt en esta iteracion
+        tablaHashing[posicionInicial] = estacion;
+        cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
     }
     else
     {
-        posicionColision = tratarColision(posicionInicial, tamanio);
+        posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
         if (posicionColision != (-1))
         {
-            //Sumar el codigo agregado al txt
-            tablaHashing.insert(tablaHashing.begin() + posicionColision, estacion);
+            //Sumar el codigo agregado al txt en esta iteracion
+            tablaHashing[posicionColision] = estacion;
             cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
         }
         else
@@ -120,7 +139,6 @@ void cargarEstacionesIniciales()
 
         while (getline(archivo, linea))
         {
-
             istringstream iss(linea);
             string codigo;
             string nombre;
@@ -128,7 +146,6 @@ void cargarEstacionesIniciales()
             int cantSurtidores;
             double litrosSurtidor;
             string tipoCombustible;
-
             Estaciones estacionNueva;
 
             if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible)
@@ -140,18 +157,17 @@ void cargarEstacionesIniciales()
                 estacionNueva.litrosSurtidor = litrosSurtidor;
                 estacionNueva.tipoCombustible = tipoCombustible;
             }
+
             insertarEstacion(estacionNueva, tamanioDeTabla);
         }
         archivo.close();
     }
-    else
-    {
+    else {
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
 
-
-//Dar de alta acomodar con hashing
+//Dar de alta con hashing
 void darDeAltaEstacionV2(){
     Estaciones estacionNueva;
     
@@ -167,7 +183,7 @@ void darDeAltaEstacionV2(){
     cin >> estacionNueva.ciudad;
     cout << "Ingrese el tipo de combustible: " << endl;
     cin >> estacionNueva.tipoCombustible;
-    while (!verificarTipoComb(estacionNueva.tipoCombustible)) {  // ACA CAMBIO EL NOT POR EL !, PROBAR SI ANDA XD
+    while (!verificarTipoComb(estacionNueva.tipoCombustible)) { 
         cout << "Los tipos de combustible validos son SUP-INF-NIT : " << endl;
         cin >> estacionNueva.tipoCombustible;
     }
@@ -177,27 +193,23 @@ void darDeAltaEstacionV2(){
     cin >> estacionNueva.litrosSurtidor;
     cout << "Todos los datos fueron ingresados correctamente" << endl;
 
-    //Insercion
+    // Insercion
     insertarEstacion(estacionNueva, tamanioDeTabla);
 }
+
 void buscarEstacion(string codigo,int tamanio){
      int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-     Estaciones estacionAux;
-     cout<<"Codigo"<<codigo<<endl;
-     estacionAux=tablaHashing[posicionInicial];
-        if (!noEstaOcupado(posicionInicial) && estacionAux.codigo==codigo)
+     Estaciones estacionAux = tablaHashing[posicionInicial];
+     
+        if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo)
         {
-            //Sumar el codigo agregado al txt
-            //tablaHashing.insert(tablaHashing.begin() + posicionInicial, estacion);
-            
             cout <<"La estacion encontrada es: "<<endl;
             mostrarDatosEstacion(estacionAux);
         }
         else if(!noEstaOcupado(posicionInicial)){
-            posicionColision = tratarColision(posicionInicial, tamanio);
+            posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
             if (posicionColision != (-1)){
-                //Sumar el codigo agregado al txt
-                //ablaHashing.insert(tablaHashing.begin() + posicionColision, estacion);
+                estacionAux = tablaHashing[posicionColision];
                 cout <<"La estacion encontrada es: "<<endl;
                 mostrarDatosEstacion(estacionAux);
             }
@@ -209,22 +221,21 @@ void buscarEstacion(string codigo,int tamanio){
         }
 
 }
-void buscarEstacionPorCodigoV2(){  //// PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO SOLO O POR NOMBRE TAMBIEN
+
+void buscarEstacionPorCodigoV2(){  // PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO SOLO O POR NOMBRE TAMBIEN
     string codigo;
     bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo)){///AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+    while(!verificarCodigo(codigo)){ //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cin>>codigo;
     }
     buscarEstacion(codigo,tamanioDeTabla);
-    
-
-
-
 }
 
+
+//DEPRECADO DE ACA PARA ABAJO
 void buscarEstacionPorCodigo()
 {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -345,6 +356,9 @@ void darDeAltaEstacion()
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
+
+//DEPRECADO DE ACA PARA ARRIBA
+
 char deseaContinuar()
 {
     char dato;
@@ -405,8 +419,6 @@ void deseaSeguir()
 int main()
 {   
     cargarEstacionesIniciales();
-    //darDeAltaEstacionV2();
     mostrarMenu();
-    // leerEstaciones();
     return 0;
 }
