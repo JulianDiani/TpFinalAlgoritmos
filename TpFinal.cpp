@@ -9,22 +9,19 @@ using namespace std;
 int cantidadDeClaves = 100; // Tamaño de registros estimados
 int tamanioDeTabla = 127;  // Tamaño de tabla
 
-// Estructura de estaciones
-struct Estaciones
-{
+struct Estaciones { // Estructura de estaciones
     string codigo;
     string nombre;
     string ciudad;
     int cantSurtidores;
     double litrosSurtidor;
     string tipoCombustible;
-    //bool colicione;
 };
 
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
-vector<Estaciones> tablaHashing(tamanioDeTabla);     // Tabla de hashing
+vector<Estaciones> tablaHashing(tamanioDeTabla); // Tabla de hashing
 
-//Funciones auxiliares
+// Funciones auxiliares
 bool verificarTipoComb (string tipo) {
     return tipo == "SUP" || tipo == "INF" || tipo == "NIT";
 }
@@ -37,13 +34,17 @@ bool verificarSalir(string dato) {
 }
 
 void mostrarDatosEstacion(Estaciones estacion){
-    cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores: "<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
+    cout<<"El codigo de la estacion es: "<< estacion.codigo<<endl<<"Nombre: "<< estacion.nombre<<endl<<"Ciudad: "<< estacion.ciudad<<endl<<
+    "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
-Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, double litrosSurtidor, string tipoCombustible) {
-        Estaciones estacionAux;
-        estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  estacionAux.ciudad = ciudad;
-        estacionAux.cantSurtidores = cantSurtidores;  estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
-        return estacionAux;
+
+Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
+double litrosSurtidor, string tipoCombustible) {
+    Estaciones estacionAux;
+    estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  
+    estacionAux.ciudad = ciudad;  estacionAux.cantSurtidores = cantSurtidores;  
+    estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
+    return estacionAux;
 }
 
 char deseaContinuar() {
@@ -81,11 +82,6 @@ int funcionDeHashing(string codigo, int tamanio) {
     return posicion;
 }
 
-bool noEstaOcupado(int posicion) {   
-    //cout << "Estoy ocupado " << tablaHashing[posicion].codigo << endl;
-    return tablaHashing[posicion].codigo.empty();
-}
-
 // Colision Quadratic probing
 // Si da -1 no encontro posicion
 // Tratamiento colicion para insertar
@@ -119,29 +115,7 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
     return salida;
 }
 
-// Insercion
-void insertarEstacion(Estaciones estacion, int tamanio) {
-    int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
-    //cout << "Pos ini" << posicionInicial << endl;
-    if (noEstaOcupado(posicionInicial)) {
-        //Sumar el codigo agregado al txt en esta iteracion
-        tablaHashing[posicionInicial] = estacion;
-        //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
-    }
-    else {
-        posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
-        if (posicionColision != (-1)) {
-            //Sumar el codigo agregado al txt en esta iteracion
-            tablaHashing[posicionColision] = estacion;
-            //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
-        }
-        else {
-            cout << "No se pudo insertar la estacion en ningun lugar." << endl;
-        }
-    }
-    cout << "Estacion registrada correctamente." << endl;
-}
-
+// Funciones Generales
 // Cargar estaciones desde el txt.
 void cargarEstacionesIniciales() {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -172,6 +146,29 @@ void cargarEstacionesIniciales() {
     else {
         cout << "No se pudo abrir el archivo." << endl;
     }
+}
+
+// Insercion
+void insertarEstacion(Estaciones estacion, int tamanio) {
+    int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
+    //cout << "Pos ini" << posicionInicial << endl;
+    if (noEstaOcupado(posicionInicial)) {
+        //Sumar el codigo agregado al txt en esta iteracion
+        tablaHashing[posicionInicial] = estacion;
+        //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
+    }
+    else {
+        posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
+        if (posicionColision != (-1)) {
+            //Sumar el codigo agregado al txt en esta iteracion
+            tablaHashing[posicionColision] = estacion;
+            //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
+        }
+        else {
+            cout << "No se pudo insertar la estacion en ningun lugar." << endl;
+        }
+    }
+    cout << "Estacion registrada correctamente." << endl;
 }
 
 //Dar de alta con hashing
