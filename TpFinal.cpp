@@ -178,8 +178,7 @@ void cargarEstacionesIniciales() {
 void darDeAltaEstacionV2() {
     Estaciones estacionNueva;
     string opc;
-    bool insertar = false;
-    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+
     while (opc != "salir"){
         cout<<"Escribi salir para terminar. "<<endl;
         cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
@@ -253,15 +252,14 @@ void buscarEstacionPorCodigoV2() {
     // PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO 
     // SOLO O POR NOMBRE TAMBIEN
     string codigo;
-    bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo) and codigo != "salir") { 
+    while(!verificarCodigo(codigo) and verificarSalir(codigo)) { 
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigo;
     }
-    if (codigo != "salir"){
+    if (verificarSalir(codigo)){
         buscarEstacion(codigo, tamanioDeTabla);
     }
 }
@@ -301,12 +299,14 @@ void eliminarEstacionPorCodigoV2(){
     string codigo;
     cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo)) { 
-// AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+    while(!verificarCodigo(codigo) and verificarSalir(codigo)) { 
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigo;
     }
-    eliminarEstacion(codigo, tamanioDeTabla);
+    if (verificarSalir(codigo)){
+        eliminarEstacion(codigo, tamanioDeTabla);
+    }
 }
 
 // Mostrar estaciones por hashing
