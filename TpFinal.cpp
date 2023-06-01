@@ -85,16 +85,18 @@ int tratarColisionInsertar(int posicion, int tamanio) {
 
 // Tratamiento colicion para buscar
 int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
-    int posicionAux,i = 1, salida = -1;
+    int i = 1, salida = -1;
+    int posicionAux = posicion + i;
     Estaciones datoAComparar;
-    while (!noEstaOcupado(posicionAux) || i < tamanio) {           
+    while (!noEstaOcupado(posicionAux) and i < tamanio) {           
         datoAComparar = tablaHashing[posicionAux];
+        cout << datoAComparar.codigo << endl;
         if (datoAComparar.codigo == codigo) {
             salida = posicionAux;
             break;
         }
         i += 1;
-        posicionAux += i * i;
+        posicionAux = posicion + i * i;
     }
     return salida;
 }
@@ -194,8 +196,11 @@ void buscarEstacion(string codigo, int tamanio){
         mostrarDatosEstacion(estacionAux);
     }
     else if(!noEstaOcupado(posicionInicial)) {
+        cout <<"Entre al else if: "<<endl;
         posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
+
         if (posicionColision != (-1)) {
+            cout <<"Entre al if: "<<endl;
             estacionAux = tablaHashing[posicionColision];
             cout <<"La estacion encontrada es: "<<endl;
             mostrarDatosEstacion(estacionAux);
@@ -477,6 +482,10 @@ void mostrarMenu()
 int main()
 {   
     cargarEstacionesIniciales();
+    cout << "Data" << tablaHashing[18].codigo << endl;
+    cout << "Data01" << tablaHashing[19].codigo << endl;
+    cout << "Data02" << tablaHashing[22].codigo << endl;
+    buscarEstacion(tablaHashing[19].codigo, tamanioDeTabla);
     mostrarMenu();
     return 0;
 }
