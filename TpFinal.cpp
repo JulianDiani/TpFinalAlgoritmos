@@ -34,7 +34,7 @@ bool verificarCodigo(string codigo){
     return codigo.size()==6;
 }
 void mostrarDatosEstacion(Estaciones estacion){
-    cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores"<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
+    cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores: "<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
 Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, double litrosSurtidor, string tipoCombustible) {
         Estaciones estacionAux;
@@ -108,20 +108,20 @@ void insertarEstacion(Estaciones estacion, int tamanio) {
     if (noEstaOcupado(posicionInicial)) {
         //Sumar el codigo agregado al txt en esta iteracion
         tablaHashing[posicionInicial] = estacion;
-        cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
+        //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
     }
     else {
         posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
         if (posicionColision != (-1)) {
             //Sumar el codigo agregado al txt en esta iteracion
             tablaHashing[posicionColision] = estacion;
-            cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
+            //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
         }
         else {
-            cout << "No se pudo insertar la estacion en ningun lugar" << endl;
+            cout << "No se pudo insertar la estacion en ningun lugar." << endl;
         }
     }
-    cout << "Estacion registrada correctamente" << endl;
+    cout << "Estacion registrada correctamente." << endl;
 }
 
 // Cargar estaciones desde el txt.
@@ -173,7 +173,7 @@ void darDeAltaEstacionV2() {
     cout << "Ingrese el tipo de combustible: " << endl;
     cin >> estacionNueva.tipoCombustible;
     while (!verificarTipoComb(estacionNueva.tipoCombustible)) { 
-        cout << "Los tipos de combustible validos son SUP-INF-NIT : " << endl;
+        cout << "Los tipos de combustible validos son SUP-INF-NIT: " << endl;
         cin >> estacionNueva.tipoCombustible;
     }
     cout << "Ingrese la cantidad de surtidores: " << endl;
@@ -206,7 +206,7 @@ void buscarEstacion(string codigo, int tamanio){
             mostrarDatosEstacion(estacionAux);
         }
         else {
-            cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
+            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
         }
     }else {
         cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
@@ -235,15 +235,14 @@ void eliminarEstacion(string codigo, int tamanio) {
     Estaciones estacionEliminada = crearEstacion("000000", "Estacion eliminada", "Estacion eliminada", 0, 0.0, "Estacion eliminada");
     //cout << "Estacion elim: "<< estacionEliminada.codigo << endl;
     if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {            
-        cout <<"La estacion codigo "<< estacionAux.codigo << " - nombre "<< estacionAux.nombre << " fue eliminada."<<endl;
-        estacionAux = estacionEliminada;
-        //tablaHashing[posicionInicial] = estacionEliminada;
-        cout <<"Entre al if "<< endl;
+        cout <<"La estacion codigo: "<< estacionAux.codigo << "\nNombre: "<< estacionAux.nombre << "\nFue eliminada."<<endl;
+        tablaHashing[posicionInicial] = estacionEliminada;
+        //cout <<"Entre al if "<< endl;
     }
     else if(!noEstaOcupado(posicionInicial)) {
         posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
-        cout <<"Entre al else if "<< endl;
-        
+        //cout <<"Entre al else if "<< endl;
+                
         if (posicionColision != (-1)) {
             estacionAux = tablaHashing[posicionColision];
             cout <<"La estacion codigo: "<< estacionAux.codigo << "\nNombre: "<< estacionAux.nombre << "\nFue eliminada."<<endl;
@@ -252,7 +251,7 @@ void eliminarEstacion(string codigo, int tamanio) {
             //cout <<"La estacion codigo 03 "<< tablaHashing[posicionColision].codigo << " - nombre "<< tablaHashing[posicionColision].nombre << endl;
         }
         else {
-            cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
+            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
         }
     }else {
         cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
