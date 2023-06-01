@@ -36,19 +36,23 @@ bool verificarCodigo(string codigo){
 void mostrarDatosEstacion(Estaciones estacion){
     cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores"<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
+Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, double litrosSurtidor, string tipoCombustible) {
+        Estaciones estacionAux;
+        estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  estacionAux.ciudad = ciudad;
+        estacionAux.cantSurtidores = cantSurtidores;  estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
+        return estacionAux;
+}
 
 // Funciones de hashing
 // Hashing Modulo
-int funcionModulo(int key, int tamanio)
-{
+int funcionModulo(int key, int tamanio) {
     return key % tamanio;
 }
 
 // Hashing Folding ultimos 3 + Divicion
 // Devuele posicion
 
-int funcionDeHashing(string codigo, int tamanio)
-{
+int funcionDeHashing(string codigo, int tamanio) {
     int salida = 0, posicion;
     for (int i = codigo.size() - 3; i < codigo.size(); i++)
     {
@@ -59,8 +63,7 @@ int funcionDeHashing(string codigo, int tamanio)
     return posicion;
 }
 
-bool noEstaOcupado(int posicion)
-{   
+bool noEstaOcupado(int posicion) {   
     //cout << "Estoy ocupado " << tablaHashing[posicion].codigo << endl;
     return tablaHashing[posicion].codigo.empty();
 }
@@ -68,14 +71,11 @@ bool noEstaOcupado(int posicion)
 // Colision Quadratic probing
 // Si da -1 no encontro posicion
 // Tratamiento colicion para insertar
-int tratarColisionInsertar(int posicion, int tamanio)
-{
+int tratarColisionInsertar(int posicion, int tamanio) {
     int posicionAux, salida = -1;
-    for (int i = 1; i < tamanio; i++)
-    {
+    for (int i = 1; i < tamanio; i++) {
         posicionAux = posicion + (i * i);
-        if (noEstaOcupado(posicionAux))
-        {
+        if (noEstaOcupado(posicionAux)) {
             salida = posicionAux;
             break;
         }
@@ -84,8 +84,7 @@ int tratarColisionInsertar(int posicion, int tamanio)
 }
 
 // Tratamiento colicion para buscar
-int tratarColisionBuscar(int posicion, int tamanio, string codigo)
-{
+int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
     int posicionAux,i = 1, salida = -1;
     Estaciones datoAComparar;
     while (!noEstaOcupado(posicionAux) || i < tamanio) {           
@@ -101,27 +100,22 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo)
 }
 
 // Insercion
-void insertarEstacion(Estaciones estacion, int tamanio)
-{
+void insertarEstacion(Estaciones estacion, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
     //cout << "Pos ini" << posicionInicial << endl;
-    if (noEstaOcupado(posicionInicial))
-    {
+    if (noEstaOcupado(posicionInicial)) {
         //Sumar el codigo agregado al txt en esta iteracion
         tablaHashing[posicionInicial] = estacion;
         cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
     }
-    else
-    {
+    else {
         posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
-        if (posicionColision != (-1))
-        {
+        if (posicionColision != (-1)) {
             //Sumar el codigo agregado al txt en esta iteracion
             tablaHashing[posicionColision] = estacion;
             cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
         }
-        else
-        {
+        else {
             cout << "No se pudo insertar la estacion en ningun lugar" << endl;
         }
     }
@@ -129,16 +123,11 @@ void insertarEstacion(Estaciones estacion, int tamanio)
 }
 
 // Cargar estaciones desde el txt.
-void cargarEstacionesIniciales()
-{
+void cargarEstacionesIniciales() {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
-
-    if (archivo.is_open())
-    {
+    if (archivo.is_open()) {
         string linea;
-
-        while (getline(archivo, linea))
-        {
+        while (getline(archivo, linea)) {
             istringstream iss(linea);
             string codigo;
             string nombre;
@@ -148,8 +137,7 @@ void cargarEstacionesIniciales()
             string tipoCombustible;
             Estaciones estacionNueva;
 
-            if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible)
-            {
+            if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible) {
                 estacionNueva.codigo = codigo;
                 estacionNueva.nombre = nombre;
                 estacionNueva.ciudad = ciudad;
@@ -157,7 +145,6 @@ void cargarEstacionesIniciales()
                 estacionNueva.litrosSurtidor = litrosSurtidor;
                 estacionNueva.tipoCombustible = tipoCombustible;
             }
-
             insertarEstacion(estacionNueva, tamanioDeTabla);
         }
         archivo.close();
@@ -168,9 +155,9 @@ void cargarEstacionesIniciales()
 }
 
 //Dar de alta con hashing
-void darDeAltaEstacionV2(){
+void darDeAltaEstacionV2() {
     Estaciones estacionNueva;
-    
+    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
     cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
     cin >> estacionNueva.codigo;
     while (!verificarCodigo(estacionNueva.codigo)) {
@@ -197,43 +184,84 @@ void darDeAltaEstacionV2(){
     insertarEstacion(estacionNueva, tamanioDeTabla);
 }
 
-void buscarEstacion(string codigo,int tamanio){
-     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-     Estaciones estacionAux = tablaHashing[posicionInicial];
+//Buscar estacion con hashing
+void buscarEstacion(string codigo, int tamanio){
+    int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
+    Estaciones estacionAux = tablaHashing[posicionInicial];
      
-        if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo)
-        {
+    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
+        cout <<"La estacion encontrada es: "<<endl;
+        mostrarDatosEstacion(estacionAux);
+    }
+    else if(!noEstaOcupado(posicionInicial)) {
+        posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
+        if (posicionColision != (-1)) {
+            estacionAux = tablaHashing[posicionColision];
             cout <<"La estacion encontrada es: "<<endl;
             mostrarDatosEstacion(estacionAux);
         }
-        else if(!noEstaOcupado(posicionInicial)){
-            posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
-            if (posicionColision != (-1)){
-                estacionAux = tablaHashing[posicionColision];
-                cout <<"La estacion encontrada es: "<<endl;
-                mostrarDatosEstacion(estacionAux);
-            }
-            else{
-                cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
-            }
-        }else{
-            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+        else {
+            cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
         }
-
+    }else {
+        cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+    }
 }
 
-void buscarEstacionPorCodigoV2(){  // PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO SOLO O POR NOMBRE TAMBIEN
+void buscarEstacionPorCodigoV2() {  
+    // PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO 
+    // SOLO O POR NOMBRE TAMBIEN
     string codigo;
     bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo)){ //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+    while(!verificarCodigo(codigo)) { 
+    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cin>>codigo;
     }
-    buscarEstacion(codigo,tamanioDeTabla);
+    buscarEstacion(codigo, tamanioDeTabla);
 }
 
+//Eliminar estacion con hashing
+void eliminarEstacion(string codigo, int tamanio) {
+    int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
+    Estaciones estacionAux = tablaHashing[posicionInicial];
+    Estaciones estacionEliminada = crearEstacion("000000", "Estacion eliminada", "Estacion eliminada", 0, 0.0, "Estacion eliminada");
+    cout << "Estacion elim: "<< estacionEliminada.codigo << endl;
+    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {            
+        cout <<"La estacion codigo "<< estacionAux.codigo << " - nombre "<< estacionAux.nombre << " fue eliminada."<<endl;
+        estacionAux = estacionEliminada;
+        tablaHashing[posicionInicial] = estacionEliminada;
+    }
+    else if(!noEstaOcupado(posicionInicial)) {
+        posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
+        if (posicionColision != (-1)) {
+            estacionAux = tablaHashing[posicionColision];
+            cout <<"La estacion codigo "<< estacionAux.codigo << " - nombre "<< estacionAux.nombre << " fue eliminada."<<endl;
+            estacionAux = estacionEliminada;
+        }
+        else {
+            cout << "No se pudo encontrar ninguna estacion con ese codigo2" << endl;
+        }
+    }else {
+        cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+    }
+}
+
+void eliminarEstacionPorCodigoV2(){  
+    //Definir si al borrar tambien que sacarlo del txt
+    string codigo;
+    bool encontrado=false;
+    cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
+    cin>>codigo;
+    while(!verificarCodigo(codigo)) { 
+    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+        cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cin>>codigo;
+    }
+    eliminarEstacion(codigo, tamanioDeTabla);
+}
 
 //DEPRECADO DE ACA PARA ABAJO
 void buscarEstacionPorCodigo()
@@ -357,19 +385,17 @@ void darDeAltaEstacion()
     }
 }
 
-//DEPRECADO DE ACA PARA ARRIBA
+// DEPRECADO DE ACA PARA ARRIBA
 
 char deseaContinuar()
 {
     char dato;
-    cout << "Si desea continuar ingrese s: ";
+    cout << "Si desea continuar ingrese s/S: ";
     cin >> dato;
-    if (dato == 's' || dato == 'S')
-    {
+    if (dato == 's' || dato == 'S') {
         return dato;
     }
-    else
-    {
+    else {
         return 'n';
     }
 }
@@ -386,7 +412,6 @@ void mostrarMenu()
         cin >> opc;
         if (opc == '1')
         {
-            //buscarEstacionPorCodigo();
             buscarEstacionPorCodigoV2();
             opc = deseaContinuar();
         }
@@ -397,7 +422,7 @@ void mostrarMenu()
         }
         else if (opc == '3')
         {
-            eliminarEstacionPorCodigo();
+            eliminarEstacionPorCodigoV2();
             opc = deseaContinuar();
         }
     }
@@ -409,8 +434,7 @@ void deseaSeguir()
     char resp;
     cout << "Desea continuar? s/n" << endl;
     cin >> resp;
-    if (resp == 's' || resp == 'S')
-    {
+    if (resp == 's' || resp == 'S') {
         mostrarMenu();
     }
     cout << "Nos vemo nemo" << endl;
