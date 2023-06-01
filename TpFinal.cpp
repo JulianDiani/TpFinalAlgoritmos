@@ -3,8 +3,6 @@
 #include <string>
 #include <vector>
 #include <sstream>
-//Para borrar podemos usar una estacion predefinida con un codigo que indica que se borro un dato.
-//Busqueda corta porque encontro uno, esta vacio o seguis buscando y llegaste al len.
 
 using namespace std;
 
@@ -33,6 +31,11 @@ bool verificarTipoComb (string tipo) {
 bool verificarCodigo(string codigo){
     return codigo.size()==6;
 }
+
+bool verificarSalir(string dato) {
+    return dato != "salir";
+}
+
 void mostrarDatosEstacion(Estaciones estacion){
     cout<<"El codigo de la estacion es: "<<estacion.codigo<<endl<<"Nombre: "<<estacion.nombre<<endl<<"Ciudad: "<<estacion.ciudad<<endl<<"Cantidad de surtidores: "<<estacion.cantSurtidores<<endl<<"Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
@@ -43,6 +46,21 @@ Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantS
         return estacionAux;
 }
 
+char deseaContinuar() {
+    char dato;
+    cout << "Si desea continuar ingrese s: " << endl;
+    cout << "Si desea salir ingrese n: " << endl;
+    cin >> dato;
+    if (dato == 's') {
+        return dato;
+    }
+    else if (dato == 'n'){
+        return 'n';
+    }
+    else{
+        return '0';
+    }
+}
 // Funciones de hashing
 // Hashing Modulo
 int funcionModulo(int key, int tamanio) {
@@ -159,34 +177,52 @@ void cargarEstacionesIniciales() {
 //Dar de alta con hashing
 void darDeAltaEstacionV2() {
     Estaciones estacionNueva;
+    string opc;
+    bool insertar = false;
     //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
-    cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
-    cin >> estacionNueva.codigo;
-    while (!verificarCodigo(estacionNueva.codigo)) {
-        cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
+    while (opc != "salir"){
+        cout<<"Escribi salir para terminar. "<<endl;
+        cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
         cin >> estacionNueva.codigo;
-    }
-    cout << "Ingrese el nombre: " << endl;
-    cin >> estacionNueva.nombre;
-    cout << "Ingrese la ciudad: " << endl;
-    cin >> estacionNueva.ciudad;
-    cout << "Ingrese el tipo de combustible: " << endl;
-    cin >> estacionNueva.tipoCombustible;
-    while (!verificarTipoComb(estacionNueva.tipoCombustible)) { 
-        cout << "Los tipos de combustible validos son SUP-INF-NIT: " << endl;
+        while (!verificarCodigo(estacionNueva.codigo) and verificarSalir(estacionNueva.codigo)) {
+            cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
+            //cout <<"Escribi salir para terminar. "<<endl;
+            cin >> estacionNueva.codigo;
+        }
+        if (!verificarSalir(estacionNueva.codigo)){
+            break;
+        }
+        cout << "Ingrese el nombre: " << endl;
+        cin >> estacionNueva.nombre;
+        if (!verificarSalir(estacionNueva.nombre)){
+            break;
+        }
+        cout << "Ingrese la ciudad: " << endl;
+        cin >> estacionNueva.ciudad;
+        if (!verificarSalir(estacionNueva.ciudad)){
+            break;
+        }
+        cout << "Ingrese el tipo de combustible: " << endl;
         cin >> estacionNueva.tipoCombustible;
+        while (!verificarTipoComb(estacionNueva.tipoCombustible) and verificarSalir(estacionNueva.tipoCombustible)) { 
+            cout << "Los tipos de combustible validos son SUP-INF-NIT: " << endl;
+            cin >> estacionNueva.tipoCombustible;
+        }
+        if (!verificarSalir(estacionNueva.tipoCombustible)){
+            break;
+        }
+        cout << "Ingrese la cantidad de surtidores: " << endl;
+        cin >> estacionNueva.cantSurtidores;
+        cout << "Ingrese los litros que tiene cada surtidor: " << endl;
+        cin >> estacionNueva.litrosSurtidor;
+        cout << "Todos los datos fueron ingresados correctamente" << endl;
+        
+        insertarEstacion(estacionNueva, tamanioDeTabla);
+        opc = "salir";
     }
-    cout << "Ingrese la cantidad de surtidores: " << endl;
-    cin >> estacionNueva.cantSurtidores;
-    cout << "Ingrese los litros que tiene cada surtidor: " << endl;
-    cin >> estacionNueva.litrosSurtidor;
-    cout << "Todos los datos fueron ingresados correctamente" << endl;
-
-    // Insercion
-    insertarEstacion(estacionNueva, tamanioDeTabla);
 }
 
-//Buscar estacion con hashing
+// Buscar estacion con hashing
 void buscarEstacion(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
     Estaciones estacionAux = tablaHashing[posicionInicial];
@@ -220,15 +256,17 @@ void buscarEstacionPorCodigoV2() {
     bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo)) { 
-    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+    while(!verificarCodigo(codigo) and codigo != "salir") { 
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigo;
     }
-    buscarEstacion(codigo, tamanioDeTabla);
+    if (codigo != "salir"){
+        buscarEstacion(codigo, tamanioDeTabla);
+    }
 }
 
-//Eliminar estacion con hashing
+// Eliminar estacion con hashing
 void eliminarEstacion(string codigo, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
     Estaciones estacionAux = tablaHashing[posicionInicial];
@@ -259,21 +297,20 @@ void eliminarEstacion(string codigo, int tamanio) {
 }
 
 void eliminarEstacionPorCodigoV2(){  
-//Definir si al borrar tambien que sacarlo del txt
+// Definir si al borrar tambien que sacarlo del txt
     string codigo;
-    bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
     cin>>codigo;
     while(!verificarCodigo(codigo)) { 
-//AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+// AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cin>>codigo;
     }
     eliminarEstacion(codigo, tamanioDeTabla);
 }
 
-//Mostrar estaciones por hashing
-void buscarEstacionYMostrar(string codigo, int tamanio){
+// Mostrar estaciones por hashing
+void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
     Estaciones estacionAux = tablaHashing[posicionInicial];
      
@@ -301,7 +338,7 @@ void mostrarEstacionesV2() {
         while (getline(archivo, linea)) {
             istringstream iss(linea);
             if (iss >> codigo){
-                buscarEstacionYMostrar(codigo, tamanioDeTabla);
+                buscarEstacionesYMostrar(codigo, tamanioDeTabla);
             }
         }
         archivo.close();
@@ -311,7 +348,7 @@ void mostrarEstacionesV2() {
     }
 }
 
-//DEPRECADO DE ACA PARA ABAJO
+// DEPRECADO DE ACA PARA ABAJO
 void buscarEstacionPorCodigo()
 {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -435,24 +472,8 @@ void darDeAltaEstacion()
 
 // DEPRECADO DE ACA PARA ARRIBA
 
-char deseaContinuar()
-{
-    char dato;
-    cout << "Si desea continuar ingrese s: ";
-    cout << "Si desea salir ingrese n: ";
-    cin >> dato;
-    if (dato == 's') {
-        return dato;
-    }
-    else if (dato == 'n'){
-        return 'n';
-    }
-    else{
-        return '0';
-    }
-}
 
-// Agregar bucle para salida tipo bot.
+
 void mostrarMenu()
 {
     char opc;
@@ -483,8 +504,7 @@ void mostrarMenu()
     cout << "Gracias por utilizar nuestro sistema!" << endl;
 }
 
-int main()
-{   
+int main() {   
     cargarEstacionesIniciales();
     //cout << "Data" << tablaHashing[18].codigo << endl;
     //cout << "Data01" << tablaHashing[19].codigo << endl;
