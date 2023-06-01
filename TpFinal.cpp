@@ -250,17 +250,56 @@ void eliminarEstacion(string codigo, int tamanio) {
 }
 
 void eliminarEstacionPorCodigoV2(){  
-    //Definir si al borrar tambien que sacarlo del txt
+//Definir si al borrar tambien que sacarlo del txt
     string codigo;
     bool encontrado=false;
     cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
     cin>>codigo;
     while(!verificarCodigo(codigo)) { 
-    //AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
+//AGREGAR ESTRATEGIA DE SALIDA POR SI EL KPO QUE USA EL SISTEMA NO ENTIENDE QUE TIENE Q PONER UN CODIGO DE 6 DIGITOS
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cin>>codigo;
     }
     eliminarEstacion(codigo, tamanioDeTabla);
+}
+
+//Mostrar estaciones por hashing
+void buscarEstacionYMostrar(string codigo, int tamanio){
+    int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
+    Estaciones estacionAux = tablaHashing[posicionInicial];
+     
+    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
+        mostrarDatosEstacion(estacionAux);
+    }
+    else if(!noEstaOcupado(posicionInicial)) {
+        posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
+        if (posicionColision != (-1)) {
+            estacionAux = tablaHashing[posicionColision];
+            mostrarDatosEstacion(estacionAux);
+        }
+        else {
+            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+        }
+    }else {
+        cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
+    }
+}
+
+void mostrarEstacionesV2() {
+    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
+    if (archivo.is_open()) {
+        string linea, codigo;
+        while (getline(archivo, linea)) {
+            istringstream iss(linea);
+            if (iss >> codigo){
+                buscarEstacionYMostrar(codigo, tamanioDeTabla);
+            }
+        }
+        archivo.close();
+    }
+    else {
+        cout << "No se pudo abrir el archivo." << endl;
+    }
 }
 
 //DEPRECADO DE ACA PARA ABAJO
@@ -390,13 +429,17 @@ void darDeAltaEstacion()
 char deseaContinuar()
 {
     char dato;
-    cout << "Si desea continuar ingrese s/S: ";
+    cout << "Si desea continuar ingrese s: ";
+    cout << "Si desea salir ingrese n: ";
     cin >> dato;
-    if (dato == 's' || dato == 'S') {
+    if (dato == 's') {
         return dato;
     }
-    else {
+    else if (dato == 'n'){
         return 'n';
+    }
+    else{
+        return '0';
     }
 }
 
@@ -405,39 +448,30 @@ void mostrarMenu()
 {
     char opc;
     cout << "Bienvenido al Menu de opciones, elija la opcion: " << endl;
-
-    while (opc != 'n')
-    {
-        cout << "1-Consultar informacion de una estacion en particular \n2-Dar de alta una nueva estacion\n3-Dar de baja estaciones\n4-Mostrar todas las estaciones\n5-Salir" << endl;
+    while (opc != 'n') {
+        cout << "1-Consultar informacion de una estacion en particular \n2-Dar de alta una nueva estacion \n3-Dar de baja estaciones \n4-Mostrar todas las estaciones \n5-Salir" << endl;
         cin >> opc;
-        if (opc == '1')
-        {
+        if (opc == '1') {
             buscarEstacionPorCodigoV2();
             opc = deseaContinuar();
         }
-        else if (opc == '2')
-        {
+        else if (opc == '2') {
             darDeAltaEstacionV2();
             opc = deseaContinuar();
         }
-        else if (opc == '3')
-        {
+        else if (opc == '3') {
             eliminarEstacionPorCodigoV2();
             opc = deseaContinuar();
         }
+        else if (opc == '4'){
+            mostrarEstacionesV2();
+            opc = deseaContinuar();
+        }
+        else if (opc == '5'){
+            opc = 'n';           
+        }
     }
     cout << "Gracias por utilizar nuestro sistema!" << endl;
-}
-
-void deseaSeguir()
-{
-    char resp;
-    cout << "Desea continuar? s/n" << endl;
-    cin >> resp;
-    if (resp == 's' || resp == 'S') {
-        mostrarMenu();
-    }
-    cout << "Nos vemo nemo" << endl;
 }
 
 int main()
