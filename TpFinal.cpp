@@ -38,6 +38,9 @@ void mostrarDatosEstacion(Estaciones estacion){
     "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
 
+bool noEstaOcupado (int posicion){
+    return tablaHashing[posicion].codigo.empty();
+}
 Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
 double litrosSurtidor, string tipoCombustible) {
     Estaciones estacionAux;
@@ -116,51 +119,19 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
 }
 
 // Funciones Generales
-// Cargar estaciones desde el txt.
-void cargarEstacionesIniciales() {
-    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
-    if (archivo.is_open()) {
-        string linea;
-        while (getline(archivo, linea)) {
-            istringstream iss(linea);
-            string codigo;
-            string nombre;
-            string ciudad;
-            int cantSurtidores;
-            double litrosSurtidor;
-            string tipoCombustible;
-            Estaciones estacionNueva;
-
-            if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible) {
-                estacionNueva.codigo = codigo;
-                estacionNueva.nombre = nombre;
-                estacionNueva.ciudad = ciudad;
-                estacionNueva.cantSurtidores = cantSurtidores;
-                estacionNueva.litrosSurtidor = litrosSurtidor;
-                estacionNueva.tipoCombustible = tipoCombustible;
-            }
-            insertarEstacion(estacionNueva, tamanioDeTabla);
-        }
-        archivo.close();
-    }
-    else {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
-
 // Insercion
 void insertarEstacion(Estaciones estacion, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
     //cout << "Pos ini" << posicionInicial << endl;
     if (noEstaOcupado(posicionInicial)) {
-        //Sumar el codigo agregado al txt en esta iteracion
+        //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
         tablaHashing[posicionInicial] = estacion;
         //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
     }
     else {
         posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
         if (posicionColision != (-1)) {
-            //Sumar el codigo agregado al txt en esta iteracion
+            //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
             tablaHashing[posicionColision] = estacion;
             //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
         }
@@ -171,7 +142,7 @@ void insertarEstacion(Estaciones estacion, int tamanio) {
     cout << "Estacion registrada correctamente." << endl;
 }
 
-//Dar de alta con hashing
+// Dar de alta con hashing
 void darDeAltaEstacionV2() {
     Estaciones estacionNueva;
     string opc;
@@ -306,19 +277,53 @@ void eliminarEstacionPorCodigoV2(){
     }
 }
 
+// Cargar estaciones desde el txt.
+void cargarEstacionesIniciales() {
+    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
+    if (archivo.is_open()) {
+        string linea;
+        while (getline(archivo, linea)) {
+            istringstream iss(linea);
+            string codigo;
+            string nombre;
+            string ciudad;
+            int cantSurtidores;
+            double litrosSurtidor;
+            string tipoCombustible;
+            Estaciones estacionNueva;
+
+            if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible) {
+                estacionNueva.codigo = codigo;
+                estacionNueva.nombre = nombre;
+                estacionNueva.ciudad = ciudad;
+                estacionNueva.cantSurtidores = cantSurtidores;
+                estacionNueva.litrosSurtidor = litrosSurtidor;
+                estacionNueva.tipoCombustible = tipoCombustible;
+            }
+            insertarEstacion(estacionNueva, tamanioDeTabla);
+        }
+        archivo.close();
+    }
+    else {
+        cout << "No se pudo abrir el archivo." << endl;
+    }
+}
+
 // Mostrar estaciones por hashing
 void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
     Estaciones estacionAux = tablaHashing[posicionInicial];
-     
+    cout<<"Las estaciones registradas son: "<<endl;
     if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
         mostrarDatosEstacion(estacionAux);
     }
     else if(!noEstaOcupado(posicionInicial)) {
         posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
+        
         if (posicionColision != (-1)) {
             estacionAux = tablaHashing[posicionColision];
             mostrarDatosEstacion(estacionAux);
+            cout<<"\n";
         }
         else {
             cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
@@ -329,6 +334,9 @@ void buscarEstacionesYMostrar(string codigo, int tamanio){
 }
 
 void mostrarEstacionesV2() {
+    // PROBLEMA: Aca tenemos que agregar las estaciones insertadas al txt porque sino se van a mostrar las nuevas
+    // o la otra opcion es crear una lista de codigos a partir de txt en primera instancia y si insertas una nueva por 
+    // interface la agregas a esa lista. Despues leemos esa lista de codigos.
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
     if (archivo.is_open()) {
         string linea, codigo;
