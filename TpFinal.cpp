@@ -25,6 +25,7 @@ vector<Estaciones> tablaHashing(tamanioDeTabla); // Tabla de hashing
 bool verificarTipoComb (string tipo) {
     return tipo == "SUP" || tipo == "INF" || tipo == "NIT";
 }
+
 bool verificarCodigo(string codigo){
     return codigo.size()==6;
 }
@@ -34,13 +35,14 @@ bool verificarSalir(string dato) {
 }
 
 void mostrarDatosEstacion(Estaciones estacion){
-    cout<<"El codigo de la estacion es: "<< estacion.codigo<<endl<<"Nombre: "<< estacion.nombre<<endl<<"Ciudad: "<< estacion.ciudad<<endl<<
+    cout<<"Codigo de la estacion: "<< estacion.codigo<<endl<<"Nombre: "<< estacion.nombre<<endl<<"Ciudad: "<< estacion.ciudad<<endl<<
     "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
 }
 
 bool noEstaOcupado (int posicion){
     return tablaHashing[posicion].codigo.empty();
 }
+
 Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
 double litrosSurtidor, string tipoCombustible) {
     Estaciones estacionAux;
@@ -52,14 +54,12 @@ double litrosSurtidor, string tipoCombustible) {
 
 char deseaContinuar() {
     char dato;
-    cout << "Si desea continuar ingrese s: " << endl;
-    cout << "Si desea salir ingrese n: " << endl;
+    cout << "Si desea continuar ingrese cualquier dato." << endl;
+    cout << "Si desea salir ingrese n/N." << endl;
+    cout << "Respuesta: ";
     cin >> dato;
     cout << endl;
-    if (dato == 's') {
-        return dato;
-    }
-    else if (dato == 'n'){
+    if (dato == 'n' || dato == 'N'){
         return 'n';
     }
     else{
@@ -508,7 +508,9 @@ void mostrarMenu()
             opc = deseaContinuar();
         }
         else if (opc == '5'){
-            opc = 'n';           
+            cout << endl; 
+            opc = 'n';
+                      
         }
     }
     cout << "Gracias por utilizar nuestro sistema!" << endl;
