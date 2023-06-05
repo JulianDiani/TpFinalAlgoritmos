@@ -55,6 +55,7 @@ char deseaContinuar() {
     cout << "Si desea continuar ingrese s: " << endl;
     cout << "Si desea salir ingrese n: " << endl;
     cin >> dato;
+    cout << endl;
     if (dato == 's') {
         return dato;
     }
@@ -313,9 +314,9 @@ void cargarEstacionesIniciales() {
 void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
     Estaciones estacionAux = tablaHashing[posicionInicial];
-    cout<<"Las estaciones registradas son: "<<endl;
+    
     if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
-        mostrarDatosEstacion(estacionAux);
+        mostrarDatosEstacion(estacionAux);        
     }
     else if(!noEstaOcupado(posicionInicial)) {
         posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
@@ -323,7 +324,6 @@ void buscarEstacionesYMostrar(string codigo, int tamanio){
         if (posicionColision != (-1)) {
             estacionAux = tablaHashing[posicionColision];
             mostrarDatosEstacion(estacionAux);
-            cout<<"\n";
         }
         else {
             cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
@@ -340,10 +340,12 @@ void mostrarEstacionesV2() {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
     if (archivo.is_open()) {
         string linea, codigo;
+        cout<<"Las estaciones registradas son: "<<endl;
         while (getline(archivo, linea)) {
             istringstream iss(linea);
             if (iss >> codigo){
                 buscarEstacionesYMostrar(codigo, tamanioDeTabla);
+                cout<<"\n";
             }
         }
         archivo.close();
@@ -488,14 +490,17 @@ void mostrarMenu()
         cin >> opc;
         if (opc == '1') {
             buscarEstacionPorCodigoV2();
+            cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '2') {
             darDeAltaEstacionV2();
+            cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '3') {
             eliminarEstacionPorCodigoV2();
+            cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '4'){
