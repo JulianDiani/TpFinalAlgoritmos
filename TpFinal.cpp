@@ -106,7 +106,7 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
     int i = 1, salida = -1;
     int posicionAux = posicion + i;
     Estaciones datoAComparar;
-    while (!noEstaOcupado(posicionAux) and i < tamanio) {           
+    while (!noEstaOcupado(posicionAux) && i < tamanio) {           
         datoAComparar = tablaHashing[posicionAux];
         //cout << datoAComparar.codigo << endl;
         if (datoAComparar.codigo == codigo) {
@@ -152,7 +152,7 @@ void darDeAltaEstacionV2() {
         cout<<"Escribi salir para terminar. "<<endl;
         cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
         cin >> estacionNueva.codigo;
-        while (!verificarCodigo(estacionNueva.codigo) and verificarSalir(estacionNueva.codigo)) {
+        while (!verificarCodigo(estacionNueva.codigo) && verificarSalir(estacionNueva.codigo)) {
             cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
             //cout <<"Escribi salir para terminar. "<<endl;
             cin >> estacionNueva.codigo;
@@ -172,7 +172,7 @@ void darDeAltaEstacionV2() {
         }
         cout << "Ingrese el tipo de combustible: " << endl;
         cin >> estacionNueva.tipoCombustible;
-        while (!verificarTipoComb(estacionNueva.tipoCombustible) and verificarSalir(estacionNueva.tipoCombustible)) { 
+        while (!verificarTipoComb(estacionNueva.tipoCombustible) && verificarSalir(estacionNueva.tipoCombustible)) { 
             cout << "Los tipos de combustible validos son SUP-INF-NIT: " << endl;
             cin >> estacionNueva.tipoCombustible;
         }
@@ -223,7 +223,7 @@ void buscarEstacionPorCodigoV2() {
     string codigo;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo) and verificarSalir(codigo)) { 
+    while(!verificarCodigo(codigo) && verificarSalir(codigo)) { 
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigo;
@@ -268,7 +268,7 @@ void eliminarEstacionPorCodigoV2(){
     string codigo;
     cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
     cin>>codigo;
-    while(!verificarCodigo(codigo) and verificarSalir(codigo)) { 
+    while(!verificarCodigo(codigo) && verificarSalir(codigo)) { 
         cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigo;
