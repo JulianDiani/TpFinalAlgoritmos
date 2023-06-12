@@ -9,17 +9,89 @@ using namespace std;
 int cantidadDeClaves = 100; // Tamaño de registros estimados
 int tamanioDeTabla = 127;  // Tamaño de tabla
 
-struct Estaciones { // Estructura de estaciones
+// struct Estaciones { // Estructura de estaciones
+//     string codigo;
+//     string nombre;
+//     string ciudad;
+//     int cantSurtidores;
+//     double litrosSurtidor;
+//     string tipoCombustible;
+// };
+class Estacion {
+private:
     string codigo;
     string nombre;
     string ciudad;
     int cantSurtidores;
     double litrosSurtidor;
     string tipoCombustible;
+
+public:
+    // Constructores
+    Estacion() {} // Constructor por defecto
+
+    Estacion(const string& codigo, const string& nombre, const string& ciudad,
+               int cantSurtidores, double litrosSurtidor, const string& tipoCombustible)
+        : codigo(codigo), nombre(nombre), ciudad(ciudad), cantSurtidores(cantSurtidores),
+          litrosSurtidor(litrosSurtidor), tipoCombustible(tipoCombustible) {
+    }
+
+    // Getters y setters
+    string getCodigo() const {
+        return codigo;
+    }
+
+    void setCodigo(const string& codigo) {
+        this->codigo = codigo;
+    }
+
+    string getNombre() const {
+        return nombre;
+    }
+
+    void setNombre(const string& nombre) {
+        this->nombre = nombre;
+    }
+
+    string getCiudad() const {
+        return ciudad;
+    }
+
+    void setCiudad(const string& ciudad) {
+        this->ciudad = ciudad;
+    }
+
+    int getCantSurtidores() const {
+        return cantSurtidores;
+    }
+
+    void setCantSurtidores(int cantSurtidores) {
+        this->cantSurtidores = cantSurtidores;
+    }
+
+    double getLitrosSurtidor() const {
+        return litrosSurtidor;
+    }
+
+    void setLitrosSurtidor(double litrosSurtidor) {
+        this->litrosSurtidor = litrosSurtidor;
+    }
+
+    string getTipoCombustible() const {
+        return tipoCombustible;
+    }
+
+    void setTipoCombustible(const string& tipoCombustible) {
+        this->tipoCombustible = tipoCombustible;
+    }
+    void getDatosEstacion() const {
+        cout<<"Codigo de la estacion: "<< codigo<<endl<<"Nombre: "<< nombre<<endl<<"Ciudad: "<< ciudad<<endl<<
+    "Cantidad de surtidores: "<< cantSurtidores<<endl<< "Litros por surtidor: "<<litrosSurtidor<<endl<<"Tipo de combustible: "<<tipoCombustible<<endl;
+    }
 };
 
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
-vector<Estaciones> tablaHashing(tamanioDeTabla); // Tabla de hashing
+vector<Estacion> tablaHashing(tamanioDeTabla); // Tabla de hashing
 
 // Funciones auxiliares
 bool verificarTipoComb (string tipo) {
@@ -34,23 +106,23 @@ bool verificarSalir(string dato) {
     return dato != "salir";
 }
 
-void mostrarDatosEstacion(Estaciones estacion){
-    cout<<"Codigo de la estacion: "<< estacion.codigo<<endl<<"Nombre: "<< estacion.nombre<<endl<<"Ciudad: "<< estacion.ciudad<<endl<<
-    "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
-}
+// void mostrarDatosEstacion(Estacion estacion){
+//     cout<<"Codigo de la estacion: "<< estacion.getCodigo<<endl<<"Nombre: "<< estacion.getNombre<<endl<<"Ciudad: "<< estacion.getCiudad<<endl<<
+//     "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
+// }
 
 bool noEstaOcupado (int posicion){
-    return tablaHashing[posicion].codigo.empty();
+    return tablaHashing[posicion].getCodigo().empty();
 }
 
-Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
-double litrosSurtidor, string tipoCombustible) {
-    Estaciones estacionAux;
-    estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  
-    estacionAux.ciudad = ciudad;  estacionAux.cantSurtidores = cantSurtidores;  
-    estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
-    return estacionAux;
-}
+// Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
+// double litrosSurtidor, string tipoCombustible) {
+//     Estaciones estacionAux;
+//     estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  
+//     estacionAux.ciudad = ciudad;  estacionAux.cantSurtidores = cantSurtidores;  
+//     estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
+//     return estacionAux;
+// }
 
 char deseaContinuar() {
     char dato;
@@ -105,11 +177,11 @@ int tratarColisionInsertar(int posicion, int tamanio) {
 int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
     int i = 1, salida = -1;
     int posicionAux = posicion + i;
-    Estaciones datoAComparar;
+    Estacion datoAComparar;   // PREGUNTAR SI PODEMOS INSTANCIAR ESTACIONES ASI O SI QUIERE QUE SI O SI SEAN CON EL NEW.
     while (!noEstaOcupado(posicionAux) && i < tamanio) {           
         datoAComparar = tablaHashing[posicionAux];
         //cout << datoAComparar.codigo << endl;
-        if (datoAComparar.codigo == codigo) {
+        if (datoAComparar.getCodigo() == codigo) {
             salida = posicionAux;
             break;
         }
@@ -121,8 +193,8 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
 
 // Funciones Generales
 // Insercion
-void insertarEstacion(Estaciones estacion, int tamanio) {
-    int posicionColision, posicionInicial = funcionDeHashing(estacion.codigo, tamanio);
+void insertarEstacion(Estacion estacion, int tamanio) {
+    int posicionColision, posicionInicial = funcionDeHashing(estacion.getCodigo(), tamanio);
     //cout << "Pos ini" << posicionInicial << endl;
     if (noEstaOcupado(posicionInicial)) {
         //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
@@ -145,44 +217,52 @@ void insertarEstacion(Estaciones estacion, int tamanio) {
 
 // Dar de alta con hashing
 void darDeAltaEstacionV2() {
-    Estaciones estacionNueva;
-    string opc;
+    Estacion estacionNueva;
+    string opc,codigo,nombre,ciudad,tipoCombustible;
+    int cantSurtidores,litrosPorSurtidor;
 
     while (opc != "salir"){
         cout<<"Escribi salir para terminar. "<<endl;
         cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
-        cin >> estacionNueva.codigo;
-        while (!verificarCodigo(estacionNueva.codigo) && verificarSalir(estacionNueva.codigo)) {
+        cin >> codigo;
+        while (!verificarCodigo(codigo) && verificarSalir(codigo)) {
             cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
             //cout <<"Escribi salir para terminar. "<<endl;
-            cin >> estacionNueva.codigo;
+            cin >> codigo;
         }
-        if (!verificarSalir(estacionNueva.codigo)){
+        if (!verificarSalir(codigo)){
             break;
         }
+        estacionNueva.setCodigo(codigo);
         cout << "Ingrese el nombre: " << endl;
-        cin >> estacionNueva.nombre;
-        if (!verificarSalir(estacionNueva.nombre)){
+        cin >> nombre;
+        if (!verificarSalir(nombre)){
             break;
         }
+        estacionNueva.setNombre(nombre);
         cout << "Ingrese la ciudad: " << endl;
-        cin >> estacionNueva.ciudad;
-        if (!verificarSalir(estacionNueva.ciudad)){
+        cin >> ciudad;
+        if (!verificarSalir(ciudad)){
             break;
         }
+        estacionNueva.setCiudad(ciudad);
         cout << "Ingrese el tipo de combustible: " << endl;
-        cin >> estacionNueva.tipoCombustible;
-        while (!verificarTipoComb(estacionNueva.tipoCombustible) && verificarSalir(estacionNueva.tipoCombustible)) { 
+        cin >> tipoCombustible;
+        while (!verificarTipoComb(tipoCombustible) && verificarSalir(tipoCombustible)) { 
             cout << "Los tipos de combustible validos son SUP-INF-NIT: " << endl;
-            cin >> estacionNueva.tipoCombustible;
+            cin >> tipoCombustible;
         }
-        if (!verificarSalir(estacionNueva.tipoCombustible)){
+        if (!verificarSalir(tipoCombustible)){
             break;
         }
+        estacionNueva.setTipoCombustible(tipoCombustible);
+
         cout << "Ingrese la cantidad de surtidores: " << endl;
-        cin >> estacionNueva.cantSurtidores;
+        cin >> cantSurtidores;
+        estacionNueva.setCantSurtidores(cantSurtidores);
         cout << "Ingrese los litros que tiene cada surtidor: " << endl;
-        cin >> estacionNueva.litrosSurtidor;
+        cin >> litrosPorSurtidor;
+        estacionNueva.setLitrosSurtidor(litrosPorSurtidor);
         cout << "Todos los datos fueron ingresados correctamente" << endl;
         
         insertarEstacion(estacionNueva, tamanioDeTabla);
@@ -193,11 +273,12 @@ void darDeAltaEstacionV2() {
 // Buscar estacion con hashing
 void buscarEstacion(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    Estaciones estacionAux = tablaHashing[posicionInicial];
+    Estacion estacionAux = tablaHashing[posicionInicial];
      
-    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
+    if (!noEstaOcupado(posicionInicial) && estacionAux.getCodigo() == codigo) {
         cout <<"La estacion encontrada es: "<<endl;
-        mostrarDatosEstacion(estacionAux);
+        // mostrarDatosEstacion(estacionAux);
+        estacionAux.getDatosEstacion();
     }
     else if(!noEstaOcupado(posicionInicial)) {
         //cout <<"Entre al else if: "<<endl;
@@ -207,7 +288,8 @@ void buscarEstacion(string codigo, int tamanio){
             //cout <<"Entre al if: "<<endl;
             estacionAux = tablaHashing[posicionColision];
             cout <<"La estacion encontrada es: "<<endl;
-            mostrarDatosEstacion(estacionAux);
+            // mostrarDatosEstacion(estacionAux);
+            estacionAux.getDatosEstacion();
         }
         else {
             cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
@@ -236,11 +318,11 @@ void buscarEstacionPorCodigoV2() {
 // Eliminar estacion con hashing
 void eliminarEstacion(string codigo, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    Estaciones estacionAux = tablaHashing[posicionInicial];
-    Estaciones estacionEliminada = crearEstacion("000000", "Estacion eliminada", "Estacion eliminada", 0, 0.0, "Estacion eliminada");
+    Estacion estacionAux = tablaHashing[posicionInicial];
+    Estacion estacionEliminada("000000", "Estacion eliminada", "Estacion eliminada", 0, 0.0, "Estacion eliminada");
     //cout << "Estacion elim: "<< estacionEliminada.codigo << endl;
-    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {            
-        cout <<"La estacion codigo: "<< estacionAux.codigo << "\nNombre: "<< estacionAux.nombre << "\nFue eliminada."<<endl;
+    if (!noEstaOcupado(posicionInicial) && estacionAux.getCodigo() == codigo) {            
+        cout <<"La estacion codigo: "<< estacionAux.getCodigo() << "\nNombre: "<< estacionAux.getNombre() << "\nFue eliminada."<<endl;
         tablaHashing[posicionInicial] = estacionEliminada;
         //cout <<"Entre al if "<< endl;
     }
@@ -250,7 +332,7 @@ void eliminarEstacion(string codigo, int tamanio) {
                 
         if (posicionColision != (-1)) {
             estacionAux = tablaHashing[posicionColision];
-            cout <<"La estacion codigo: "<< estacionAux.codigo << "\nNombre: "<< estacionAux.nombre << "\nFue eliminada."<<endl;
+            cout <<"La estacion codigo: "<< estacionAux.getCodigo()<< "\nNombre: "<< estacionAux.getNombre() << "\nFue eliminada."<<endl;
             tablaHashing[posicionColision] = estacionEliminada;
             //cout <<"La estacion codigo 02 "<< estacionAux.codigo << " - nombre "<< estacionAux.nombre << endl;
             //cout <<"La estacion codigo 03 "<< tablaHashing[posicionColision].codigo << " - nombre "<< tablaHashing[posicionColision].nombre << endl;
@@ -291,15 +373,21 @@ void cargarEstacionesIniciales() {
             int cantSurtidores;
             double litrosSurtidor;
             string tipoCombustible;
-            Estaciones estacionNueva;
+            Estacion estacionNueva;
 
             if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible) {
-                estacionNueva.codigo = codigo;
-                estacionNueva.nombre = nombre;
-                estacionNueva.ciudad = ciudad;
-                estacionNueva.cantSurtidores = cantSurtidores;
-                estacionNueva.litrosSurtidor = litrosSurtidor;
-                estacionNueva.tipoCombustible = tipoCombustible;
+                // estacionNueva.codigo = codigo;
+                // estacionNueva.nombre = nombre;
+                // estacionNueva.ciudad = ciudad;
+                // estacionNueva.cantSurtidores = cantSurtidores;
+                // estacionNueva.litrosSurtidor = litrosSurtidor;
+                // estacionNueva.tipoCombustible = tipoCombustible;
+                estacionNueva.setCodigo(codigo);
+                estacionNueva.setNombre(nombre);
+                estacionNueva.setCiudad(ciudad);
+                estacionNueva.setCantSurtidores(cantSurtidores);
+                estacionNueva.setLitrosSurtidor(litrosSurtidor);
+                estacionNueva.setTipoCombustible(tipoCombustible);
             }
             insertarEstacion(estacionNueva, tamanioDeTabla);
         }
@@ -313,17 +401,19 @@ void cargarEstacionesIniciales() {
 // Mostrar estaciones por hashing
 void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    Estaciones estacionAux = tablaHashing[posicionInicial];
+    Estacion estacionAux = tablaHashing[posicionInicial];
     
-    if (!noEstaOcupado(posicionInicial) && estacionAux.codigo == codigo) {
-        mostrarDatosEstacion(estacionAux);        
+    if (!noEstaOcupado(posicionInicial) && estacionAux.getCodigo() == codigo) {
+        // mostrarDatosEstacion(estacionAux);
+        estacionAux.getDatosEstacion();        
     }
     else if(!noEstaOcupado(posicionInicial)) {
         posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
         
         if (posicionColision != (-1)) {
             estacionAux = tablaHashing[posicionColision];
-            mostrarDatosEstacion(estacionAux);
+            // mostrarDatosEstacion(estacionAux);
+            estacionAux.getDatosEstacion();  
         }
         else {
             cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
@@ -337,8 +427,8 @@ void mostrarEstacionesV2() {
     // PROBLEMA: Aca tenemos que agregar las estaciones insertadas al txt porque sino se van a mostrar las nuevas
     // o la otra opcion es crear una lista de codigos a partir de txt en primera instancia y si insertas una nueva por 
     // interface la agregas a esa lista. Despues leemos esa lista de codigos.
-    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
-    if (archivo.is_open()) {
+    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo 
+    if (archivo.is_open()) { // ACA ESTO ME PARECE Q NO HACE FALTA,XQ NOSOTROS INSTANCIAMOS TODAS LAS ESTACIONES DEL TXT EN OBJETOS,ACA TENDRIAMOS QUE RECORRER LA TABLA DE HASH Y MOSTRARLOS NOMAS
         string linea, codigo;
         cout<<"Las estaciones registradas son: "<<endl;
         while (getline(archivo, linea)) {
