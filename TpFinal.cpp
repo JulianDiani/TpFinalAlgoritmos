@@ -423,6 +423,15 @@ void buscarEstacionesYMostrar(string codigo, int tamanio){
     }
 }
 
+void mostrarEstaciones3(){ // Aca estoy recorriendo toda la tabla de hash, buscar la forma de no recorrerla toda.
+    for (Estacion estacion : tablaHashing) {
+        if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
+            estacion.getDatosEstacion();
+        }
+        
+}
+}
+
 void mostrarEstacionesV2() {
     // PROBLEMA: Aca tenemos que agregar las estaciones insertadas al txt porque sino se van a mostrar las nuevas
     // o la otra opcion es crear una lista de codigos a partir de txt en primera instancia y si insertas una nueva por 
@@ -594,7 +603,8 @@ void mostrarMenu()
             opc = deseaContinuar();
         }
         else if (opc == '4'){
-            mostrarEstacionesV2();
+            // mostrarEstacionesV2();
+            mostrarEstaciones3();
             opc = deseaContinuar();
         }
         else if (opc == '5'){
