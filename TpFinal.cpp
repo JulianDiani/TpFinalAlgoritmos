@@ -7,6 +7,7 @@
 #include"Grafo.h"
 #include"Arista.h"
 #include"Nodo.h"
+#include"Viaje.h"
 
 using namespace std;
 
@@ -331,6 +332,7 @@ void cargarEstacionesIniciales() {
     }
 }
 
+
 // Mostrar estaciones por hashing
 void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
@@ -551,6 +553,9 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
+    // Viaje viajesito;
+    // viajesito.setCodigoPartida("PRUEBA123");
+    // cout<<"El viaje de prueba es: "<< viajesito.getCodigoPartida()<<endl;
     
 
     //cout << "Data" << tablaHashing[18].codigo << endl;
