@@ -4,6 +4,9 @@
 #include <vector>
 #include <sstream>
 #include "Estacion.h"
+#include"Grafo.h"
+#include"Arista.h"
+#include"Nodo.h"
 
 using namespace std;
 
@@ -548,10 +551,13 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
+    
+
     //cout << "Data" << tablaHashing[18].codigo << endl;
     //cout << "Data01" << tablaHashing[19].codigo << endl;
     //cout << "Data02" << tablaHashing[22].codigo << endl;
     //buscarEstacion(tablaHashing[19].codigo, tamanioDeTabla);
     mostrarMenu();
+
     return 0;
 }
