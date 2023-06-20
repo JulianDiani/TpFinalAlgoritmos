@@ -343,19 +343,19 @@ void cargarViajesIniciales() {
             string codigoOrigen;
             string codigoDestino;
             int costoViaje;
-            double horasviaje;
+            double horasViaje;
             Viaje viajeNuevo;
         
 
-            if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> costoViaje) {
+            if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
                 viajeNuevo.setCodigoPartida(codigoOrigen);
                 viajeNuevo.setCodigoDestino(codigoDestino);
                 viajeNuevo.setCostoViaje(costoViaje);
-                viajeNuevo.setHorasViaje(horasviaje);
+                viajeNuevo.setHorasViaje(horasViaje);
                 
             }
             //insertarEstacion(estacionNueva, tamanioDeTabla);
-            vecPrueba.push_back(viajeNuevo);
+            vectorViajes.push_back(viajeNuevo);
         }
         archivo.close();
     }
@@ -586,7 +586,17 @@ void mostrarMenu()
 int main() {   
     cargarEstacionesIniciales();
     cargarViajesIniciales();
-    cout<<"Probando si esto funca: "<<vecPrueba[1].getCodigoPartida()<<endl;
+    Grafo grafito;
+    for (const auto viaje : vectorViajes) {
+            cout<<"costo de viaje: "<<viaje.getCostoViaje();
+            Nodo nodoNuevo=Nodo(viaje.getCodigoDestino());
+            Nodo nodoPrueba=Nodo("Pruebita");
+            grafito.agregarNodo(nodoNuevo);
+            grafito.agregarNodo(nodoPrueba);
+            grafito.agregarArista(nodoNuevo,nodoPrueba,viaje.getCostoViaje(),viaje.getHorasViaje());
+            
+        };
+    cout<<"Probando si esto funca: "<<vectorViajes[1].getCodigoPartida()<<endl;
      Viaje viajesito;
      viajesito.setCodigoPartida("PRUEBA123");
      viajesito.setCodigoDestino("prueba2");
@@ -596,6 +606,7 @@ int main() {
      cout<<"El destino de la prueba es: "<<viajesito.getCodigoDestino()<<endl;
      cout<<"El costo es: "<< viajesito.getCostoViaje()<<endl;
      cout<<"El tiempo de viaje es es: "<< viajesito.getHorasViaje()<<endl;
+     grafito.mostrarAristas();
     // Viaje viajesito2;
     // viajesito2.setCodigoPartida("PRUEBA1234");
     //  viajesito2.setCodigoDestino("prueba24");
