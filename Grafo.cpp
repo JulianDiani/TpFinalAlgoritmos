@@ -9,6 +9,16 @@ void Grafo::agregarArista(const Nodo& origen, const Nodo& destino, int costoDeVi
     aristas.push_back(arista);
 }
 
+bool Grafo::buscarNodo(string codigo){
+    bool salida=false;
+    for (const auto& nodo:nodos){
+        if(nodo.codigoOrigen==codigo){
+            salida=true;
+        }
+    }
+    return salida;
+}
+
 void Grafo::mostrarNodos() {
     std::cout << "Nodos en el grafo:" << std::endl;
     for (const auto& nodo : nodos) {

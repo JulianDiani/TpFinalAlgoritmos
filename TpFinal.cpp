@@ -516,6 +516,36 @@ bool encontrarEstacion(string codigo)
     return encontrado;
 }
 
+
+//ARRANCA GRAFOS
+Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
+    Grafo grafoViajes;
+   
+    for(const auto viaje : vectorViajes){
+         Nodo nodoOrigen(viaje.getCodigoPartida());
+         Nodo nodoDestino(viaje.getCodigoDestino());
+        if(grafoViajes.buscarNodo(viaje.getCodigoPartida())&& grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+            grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
+        }else if(grafoViajes.buscarNodo(viaje.getCodigoPartida()) && !grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+            nodoDestino=Nodo(viaje.getCodigoDestino());
+            grafoViajes.agregarNodo(nodoDestino);
+            grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
+        }else if(!grafoViajes.buscarNodo(viaje.getCodigoPartida()) && grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+            nodoOrigen=Nodo(viaje.getCodigoPartida());
+            grafoViajes.agregarNodo(nodoOrigen);
+            grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
+        }else{
+            nodoOrigen=Nodo(viaje.getCodigoPartida());
+            nodoDestino=Nodo(viaje.getCodigoDestino());
+            grafoViajes.agregarNodo(nodoOrigen);
+            grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
+        }
+    }
+    return grafoViajes;
+}
+
+
+
 void darDeAltaEstacion()
 {
     ofstream archivo(archivoEstaciones, ios::app); // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -586,27 +616,11 @@ void mostrarMenu()
 int main() {   
     cargarEstacionesIniciales();
     cargarViajesIniciales();
-    Grafo grafito;
-    for (const auto viaje : vectorViajes) {
-            cout<<"costo de viaje: "<<viaje.getCostoViaje();
-            Nodo nodoNuevo=Nodo(viaje.getCodigoDestino());
-            Nodo nodoPrueba=Nodo("Pruebita");
-            grafito.agregarNodo(nodoNuevo);
-            grafito.agregarNodo(nodoPrueba);
-            grafito.agregarArista(nodoNuevo,nodoPrueba,viaje.getCostoViaje(),viaje.getHorasViaje());
-            
-        };
-    cout<<"Probando si esto funca: "<<vectorViajes[1].getCodigoPartida()<<endl;
-     Viaje viajesito;
-     viajesito.setCodigoPartida("PRUEBA123");
-     viajesito.setCodigoDestino("prueba2");
-     viajesito.setCostoViaje(120);
-     viajesito.setHorasViaje(12.5);
-     cout<<"El viaje de prueba es: "<< viajesito.getCodigoPartida()<<endl;
-     cout<<"El destino de la prueba es: "<<viajesito.getCodigoDestino()<<endl;
-     cout<<"El costo es: "<< viajesito.getCostoViaje()<<endl;
-     cout<<"El tiempo de viaje es es: "<< viajesito.getHorasViaje()<<endl;
-     grafito.mostrarAristas();
+    Grafo prueba;
+    prueba=generarGrafoPesado(vectorViajes);
+    prueba.mostrarNodos();
+    prueba.mostrarAristas();
+
     // Viaje viajesito2;
     // viajesito2.setCodigoPartida("PRUEBA1234");
     //  viajesito2.setCodigoDestino("prueba24");
