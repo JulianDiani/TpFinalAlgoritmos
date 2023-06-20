@@ -25,7 +25,9 @@ int tamanioDeTabla = 127;  // Tamaño de tabla
 
 
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
+string archivoViajes= "viajes.txt";
 vector<Estacion> tablaHashing(tamanioDeTabla); // Tabla de hashing
+vector<Viaje> vectorViajes;
 
 // Funciones auxiliares
 bool verificarTipoComb (string tipo) {
@@ -332,6 +334,36 @@ void cargarEstacionesIniciales() {
     }
 }
 
+void cargarViajesIniciales() {
+    ifstream archivo(archivoViajes); // Reemplaza "datos.txt" por el nombre de tu archivo
+    if (archivo.is_open()) {
+        string linea;
+        while (getline(archivo, linea)) {
+            istringstream iss(linea);
+            string codigoOrigen;
+            string codigoDestino;
+            int costoViaje;
+            double horasviaje;
+            Viaje viajeNuevo;
+        
+
+            if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> costoViaje) {
+                viajeNuevo.setCodigoPartida(codigoOrigen);
+                viajeNuevo.setCodigoDestino(codigoDestino);
+                viajeNuevo.setCostoViaje(costoViaje);
+                viajeNuevo.setHorasViaje(horasviaje);
+                
+            }
+            //insertarEstacion(estacionNueva, tamanioDeTabla);
+            vecPrueba.push_back(viajeNuevo);
+        }
+        archivo.close();
+    }
+    else {
+        cout << "No se pudo abrir el archivo." << endl;
+    }
+}
+
 
 // Mostrar estaciones por hashing
 void buscarEstacionesYMostrar(string codigo, int tamanio){
@@ -553,6 +585,8 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
+    cargarViajesIniciales();
+    cout<<"Probando si esto funca: "<<vecPrueba[1].getCodigoPartida()<<endl;
      Viaje viajesito;
      viajesito.setCodigoPartida("PRUEBA123");
      viajesito.setCodigoDestino("prueba2");
