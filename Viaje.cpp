@@ -4,7 +4,7 @@ using namespace std;
 // Implementación de los constructores
 Viaje::Viaje() {}
 
-Viaje::Viaje(const std::string &codigoPartida, const std::string &codigoDestino, const double costoViaje, const double horasViaje)
+Viaje::Viaje(const std::string codigoPartida, const std::string codigoDestino, const int costoViaje, const double horasViaje)
 {
 }
 
@@ -13,15 +13,22 @@ string Viaje::getCodigoPartida() const {
     return codigoPartida;
 }
 
-void Viaje::setCodigoPartida(const string& codigoPartida) {
+void Viaje::setCodigoPartida(const string codigoPartida) {
     this->codigoPartida = codigoPartida;
 }
 
 string Viaje::getCodigoDestino() const {
     return codigoDestino;
 }
+void Viaje::setCodigoDestino(const string codigoDestino2) {
+    this->codigoDestino=codigoDestino2;
+}
 
-void Viaje::setCostoViaje(double costoViaje) {
+int Viaje::getCostoViaje() const {
+    return costoViaje;
+}
+
+void Viaje::setCostoViaje(int costoViaje) {
     this->costoViaje = costoViaje;
 }
 

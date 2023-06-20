@@ -22,7 +22,7 @@ void Grafo::mostrarAristas() {
         std::cout << "Nodo " << nodo.codigoOrigen << ":" << std::endl;
         for (const auto& arista : aristas) {
             if (arista.origen.codigoOrigen == nodo.codigoOrigen) {
-                std::cout << " (Nodo origen: " << arista.origen.codigoOrigen << " -> Nodo destino: " << arista.destino.codigoOrigen << "), Costo de viaje: " << arista.costoDeViaje << std::endl;
+                std::cout << " (Nodo origen: " << arista.origen.codigoOrigen << " -> Nodo destino: " << arista.destino.codigoOrigen << "-> Costo de viaje: " << arista.costoDeViaje << " -> Horas de viaje: "<<arista.horasViaje<<")"<<std::endl;
             }
         }
         std::cout << std::endl;

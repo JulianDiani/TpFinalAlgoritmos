@@ -553,15 +553,32 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
-    // Viaje viajesito;
-    // viajesito.setCodigoPartida("PRUEBA123");
-    // cout<<"El viaje de prueba es: "<< viajesito.getCodigoPartida()<<endl;
-    
-
-    //cout << "Data" << tablaHashing[18].codigo << endl;
-    //cout << "Data01" << tablaHashing[19].codigo << endl;
-    //cout << "Data02" << tablaHashing[22].codigo << endl;
-    //buscarEstacion(tablaHashing[19].codigo, tamanioDeTabla);
+     Viaje viajesito;
+     viajesito.setCodigoPartida("PRUEBA123");
+     viajesito.setCodigoDestino("prueba2");
+     viajesito.setCostoViaje(120);
+     viajesito.setHorasViaje(12.5);
+     cout<<"El viaje de prueba es: "<< viajesito.getCodigoPartida()<<endl;
+     cout<<"El destino de la prueba es: "<<viajesito.getCodigoDestino()<<endl;
+     cout<<"El costo es: "<< viajesito.getCostoViaje()<<endl;
+     cout<<"El tiempo de viaje es es: "<< viajesito.getHorasViaje()<<endl;
+    // Viaje viajesito2;
+    // viajesito2.setCodigoPartida("PRUEBA1234");
+    //  viajesito2.setCodigoDestino("prueba24");
+    //  viajesito2.setCostoViaje(120);
+    //  viajesito2.setHorasViaje(12.5);
+    // Grafo grafito;
+    // Nodo prueba(viajesito.getCodigoPartida());
+    // Nodo prueba2(viajesito2.getCodigoPartida());
+    // grafito.agregarNodo(prueba);
+    // grafito.agregarNodo(prueba2);
+    // grafito.agregarArista(prueba,prueba2,3,3.1);
+    // //cout << "Data" << tablaHashing[18].codigo << endl;
+    // //cout << "Data01" << tablaHashing[19].codigo << endl;
+    // //cout << "Data02" << tablaHashing[22].codigo << endl;
+    // //buscarEstacion(tablaHashing[19].codigo, tamanioDeTabla);
+    // grafito.mostrarNodos();
+    // grafito.mostrarAristas();
     mostrarMenu();
 
     return 0;

@@ -11,18 +11,18 @@ private:
 public:
 Viaje(); // Constructor por defecto
 
-    Viaje(const std::string& codigoPartida, const std::string& codigoDestino, const double costoViaje,
+    Viaje(const std::string codigoPartida, const std::string codigoDestino, const int costoViaje,
              const double horasViaje);
 
     // Getters y setters
     std::string getCodigoPartida() const;
-    void setCodigoPartida(const std::string& codigo);
+    void setCodigoPartida(const std::string codigo);
 
     std::string getCodigoDestino() const;
-    void setCodigoDestino(const std::string& nombre);
+    void setCodigoDestino(const std::string codigoDestino);
 
-    double getCostoViaje() const;
-    void setCostoViaje(const double costoViaje);
+    int getCostoViaje() const;
+    void setCostoViaje(const int costoViaje);
     double getHorasViaje() const;
     void setHorasViaje(const double horasViaje);
 
