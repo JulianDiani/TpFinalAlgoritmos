@@ -8,9 +8,10 @@ public:
     Nodo origen;
     Nodo destino;
     int costoDeViaje;
+    double horasViaje;
 
     // Constructor de la clase Aristas
-    Aristas(const Nodo& src, const Nodo& dest, int w);
+    Aristas(const Nodo& src, const Nodo& dest, int w,double h);
 };
 
 #endif

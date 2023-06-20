@@ -8,15 +8,15 @@
 
 class Grafo {
 private:
-    std::vector<Nodo> nodes; // Vector de nodos
-    std::vector<Aristas> edges; // Vector de aristas
+    std::vector<Nodo> nodos; // Vector de nodos
+    std::vector<Aristas> aristas; // Vector de aristas
 
 public:
     // Función para agregar un nodo al grafo
     void agregarNodo(const Nodo& nodo);
 
     // Función para agregar una arista al grafo
-    void agregarArista(const Nodo& origen, const Nodo& destino, int costoDeViaje);
+    void agregarArista(const Nodo& origen, const Nodo& destino, int costoDeViaje,double horasViaje);
 
     // Función para mostrar los nodos del grafo
     void mostrarNodos();
