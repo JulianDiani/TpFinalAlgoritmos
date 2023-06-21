@@ -31,13 +31,9 @@ bool verificarSalir(string dato) {
     return dato != "salir";
 }
 
-
-
 bool noEstaOcupado (int posicion){
     return tablaHashing[posicion].getCodigo().empty();
 }
-
-
 
 char deseaContinuar() {
     char dato;
@@ -131,7 +127,7 @@ void insertarEstacion(Estacion estacion, int tamanio) {
 }
 
 // Dar de alta con hashing
-void darDeAltaEstacionV2() {
+void darDeAltaEstacion() {
     Estacion estacionNueva;
     string opc,codigo,nombre,ciudad,tipoCombustible;
     int cantSurtidores,litrosPorSurtidor;
@@ -214,7 +210,7 @@ void buscarEstacion(string codigo, int tamanio){
     }
 }
 
-void buscarEstacionPorCodigoV2() {  
+void buscarEstacionPorCodigo() {  
     // PREGUNTAR SI TIENE SENTIDO QUE HAYA ESTACIONES CON EL MISMO CODIGO,DUDA PARA BUSCAR POR CODIGO 
     // SOLO O POR NOMBRE TAMBIEN
     string codigo;
@@ -260,22 +256,8 @@ void eliminarEstacion(string codigo, int tamanio) {
     }
 }
 
-void eliminarEstacionPorCodigoV2(){  
-// Definir si al borrar tambien que sacarlo del txt
-    string codigo;
-    cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
-    cin>>codigo;
-    while(!verificarCodigo(codigo) && verificarSalir(codigo)) { 
-        cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
-        cout<<"Escribi salir para terminar. "<<endl;
-        cin>>codigo;
-    }
-    if (verificarSalir(codigo)){
-        eliminarEstacion(codigo, tamanioDeTabla);
-    }
-}
 
-// Cargar estaciones desde el txt.
+// Cargar txts estaciones- viajes.
 void cargarEstacionesIniciales() {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
     if (archivo.is_open()) {
@@ -338,6 +320,15 @@ void cargarViajesIniciales() {
 }
 
 
+// mostrarEstaciones VIGENTE 
+void mostrarEstaciones(){
+    for (Estacion estacion : tablaHashing) {
+        if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
+            estacion.getDatosEstacion();
+        }
+}
+}
+// mostrarEstacionesV2 - buscarEstacionesYMostrar DEPRECADO 
 // Mostrar estaciones por hashing
 void buscarEstacionesYMostrar(string codigo, int tamanio){
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
@@ -363,15 +354,6 @@ void buscarEstacionesYMostrar(string codigo, int tamanio){
     }
 }
 
-void mostrarEstaciones3(){ // Aca estoy recorriendo toda la tabla de hash, buscar la forma de no recorrerla toda.
-    for (Estacion estacion : tablaHashing) {
-        if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
-            estacion.getDatosEstacion();
-        }
-        
-}
-}
-
 void mostrarEstacionesV2() {
     // PROBLEMA: Aca tenemos que agregar las estaciones insertadas al txt porque sino se van a mostrar las nuevas
     // o la otra opcion es crear una lista de codigos a partir de txt en primera instancia y si insertas una nueva por 
@@ -395,7 +377,7 @@ void mostrarEstacionesV2() {
 }
 
 
-//ARRANCA GRAFOS
+//Grafo pesado original "generar"
 Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
     Grafo grafoViajes;
    
@@ -455,39 +437,109 @@ Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
 //     }
 // }
 
+// Menu principal y funciones
+void busquedaGrafoPorCosto(){
+    string codigoEstacionOrigen;
+    string codigoEstacionDestino;
 
+    cout<<"Debera ingresar una estacion de origen y destino, para calcular el tiempo que tardaria"<<endl;
+    cout<<"Ingrese el codigo de la estacion origen: "<<endl;
+    cin>>codigoEstacionOrigen;
+    while(!verificarCodigo(codigoEstacionOrigen) && verificarSalir(codigoEstacionOrigen)) { 
+        cout<<"El codigo de la estacion origen debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
+        cin>>codigoEstacionOrigen;
+    }
+    
+    cout<<"Ingrese el codigo de la estacion destino: "<<endl;
+    cin>>codigoEstacionDestino;
+    while(!verificarCodigo(codigoEstacionDestino) && verificarSalir(codigoEstacionDestino)) { 
+        cout<<"El codigo de la estacion destino debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
+        cin>>codigoEstacionDestino;
+    }
+    if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
+        cout << "Falta funcionalidad busqueda por costo en grafo"<< endl;
+    }
+}
 
+void busquedaGrafoPorTiempo(){
+    string codigoEstacionOrigen;
+    string codigoEstacionDestino;
 
+    cout<<"Debera ingresar una estacion de origen y destino, para calcular el tiempo que tardaria"<<endl;
+    cout<<"Ingrese el codigo de la estacion origen: "<<endl;
+    cin>>codigoEstacionOrigen;
+    while(!verificarCodigo(codigoEstacionOrigen) && verificarSalir(codigoEstacionOrigen)) { 
+        cout<<"El codigo de la estacion origen debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
+        cin>>codigoEstacionOrigen;
+    }
+    
+    cout<<"Ingrese el codigo de la estacion destino: "<<endl;
+    cin>>codigoEstacionDestino;
+    while(!verificarCodigo(codigoEstacionDestino) && verificarSalir(codigoEstacionDestino)) { 
+        cout<<"El codigo de la estacion destino debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
+        cin>>codigoEstacionDestino;
+    }
+    if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
+        cout << "Falta funcionalidad busqueda por tiempo en grafo"<< endl;
+    }
+}
 
+void eliminarEstacionPorCodigo(){
+    string codigo;
+    cout<<"Ingrese el codigo de la estacion que desea eliminar: "<<endl;
+    cin>>codigo;
+    while(!verificarCodigo(codigo) && verificarSalir(codigo)) { 
+        cout<<"El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
+        cout<<"Escribi salir para terminar. "<<endl;
+        cin>>codigo;
+    }
+    if (verificarSalir(codigo)){
+        eliminarEstacion(codigo, tamanioDeTabla);
+    }
+}
 
 void mostrarMenu()
 {
     char opc;
     cout << "Bienvenido al Menu de opciones, elija la opcion: " << endl;
     while (opc != 'n') {
-        cout << "1-Consultar informacion de una estacion en particular \n2-Dar de alta una nueva estacion \n3-Dar de baja estaciones \n4-Mostrar todas las estaciones \n5-Salir" << endl;
+        cout << "1-Consultar informacion de una estacion en particular \n2-Dar de alta una nueva estacion \n3-Dar de baja estaciones \n4-Mostrar todas las estaciones \n5-Busqueda de viaje por costo \n6-Busqueda de viaje por tiempo \n7-Salir" << endl;
         cin >> opc;
         if (opc == '1') {
-            buscarEstacionPorCodigoV2();
+            buscarEstacionPorCodigo();
             cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '2') {
-            darDeAltaEstacionV2();
+            darDeAltaEstacion();
             cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '3') {
-            eliminarEstacionPorCodigoV2();
+            eliminarEstacionPorCodigo();
             cout << endl;
             opc = deseaContinuar();
         }
         else if (opc == '4'){
-            // mostrarEstacionesV2();
-            mostrarEstaciones3();
+            mostrarEstaciones();
+            cout << endl; 
             opc = deseaContinuar();
         }
-        else if (opc == '5'){
+         else if (opc == '5'){        
+            busquedaGrafoPorCosto(); 
+            cout << endl; 
+            opc = deseaContinuar();                      
+        }
+         else if (opc == '6'){
+            busquedaGrafoPorTiempo(); 
+            cout << endl;            
+            opc = deseaContinuar();                      
+        }
+        else if (opc == '7'){
             cout << endl; 
             opc = 'n';
                       
