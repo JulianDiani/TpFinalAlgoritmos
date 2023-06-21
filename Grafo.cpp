@@ -18,6 +18,15 @@ bool Grafo::encontreNodo(string codigo){
     }
     return salida;
 }
+Nodo Grafo::encontreNodo2(string codigo){
+    Nodo salida("");
+    for (const auto& nodo:nodos){
+        if(nodo.codigoOrigen==codigo){
+            salida=nodo;
+        }
+    }
+    return salida;
+}
 
 void Grafo::mostrarNodos() {
     std::cout << "Nodos en el grafo:" << std::endl;
@@ -37,4 +46,15 @@ void Grafo::mostrarAristas() {
         }
         std::cout << std::endl;
     }
+}
+vector<Nodo> Grafo::getAdyacencia(const Nodo& nodo) {
+    vector<Nodo> adyacentes;
+    
+    for (const auto& arista : aristas) {
+        if (arista.origen.codigoOrigen == nodo.codigoOrigen) {
+            adyacentes.push_back(arista.destino);
+        }
+    }
+    
+    return adyacentes;
 }

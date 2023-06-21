@@ -423,6 +423,39 @@ Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
 }
 
 
+//const int INFINITO = std::numeric_limits<int>::max();
+
+// void dijkstra(const Grafo& G, int nodo_fuente) {
+//     int num_vertices = G.getNumVertices();
+//     std::vector<int> distancia(num_vertices, INFINITO);
+//     std::vector<int> padre(num_vertices, -1);
+//     std::vector<bool> visto(num_vertices, false);
+    
+//     distancia[nodo_fuente] = 0;
+//     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> cola;
+//     cola.push(std::make_pair(0, nodo_fuente));
+    
+//     while (!cola.empty()) {
+//         int u = cola.top().second;
+//         cola.pop();
+        
+//         visto[u] = true;
+        
+//         for (const auto& v : G.getAdyacencia(u)) {
+//             if (!visto[v]) {
+//                 int peso_uv = G.getPeso(u, v);
+                
+//                 if (distancia[v] > distancia[u] + peso_uv) {
+//                     distancia[v] = distancia[u] + peso_uv;
+//                     padre[v] = u;
+//                     cola.push(std::make_pair(distancia[v], v));
+//                 }
+//             }
+//         }
+//     }
+// }
+
+
 
 
 
@@ -462,7 +495,14 @@ void mostrarMenu()
     }
     cout << "Gracias por utilizar nuestro sistema!" << endl;
 }
-// PREGUNTAS: ¿Como recorremos el Grafo? ¿Podemos hacer instancias de clase asi (Nodo(bla,bla,bla)) o tiene que ser con New?¿Los nodos tienen que ser estaciones o no es necesario?
+// PREGUNTAS: ¿Como recorremos el Grafo?
+// ¿Podemos hacer instancias de clase asi (Nodo(bla,bla,bla)) o tiene que ser con New?
+//¿Los nodos del grafo tienen que ser estaciones o no es necesario? 
+//¿camion cisterna en que parte entra?????????????????????????????????????????
+//¿Litros y costo de viaje, habla de pesos y despues de litros.. no se entiende
+// Tema menu¿Hacemos un menu general? Onda 1- Menu estaciones 2-Menu Viajes o que onda?
+//
+
 int main() {   
     cargarEstacionesIniciales();
     cargarViajesIniciales();
@@ -470,6 +510,11 @@ int main() {
     prueba=generarGrafoPesado(vectorViajes);
     prueba.mostrarNodos();
     prueba.mostrarAristas();
+    // Nodo nodoAProbar=prueba.encontreNodo2("BAS001");
+    // vector<Nodo> vecNodos=prueba.getAdyacencia(nodoAProbar);
+    // for(const auto nodo : vecNodos){
+    //     cout<<"Adayacentes"<<nodo.codigoOrigen<<endl;
+    // }
     mostrarMenu();
 
     return 0;

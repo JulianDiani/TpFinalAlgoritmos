@@ -16,6 +16,7 @@ public:
     void agregarNodo(const Nodo& nodo);
 
     bool encontreNodo(string codigo);
+    Nodo encontreNodo2(string codigo);
 
     // Función para agregar una arista al grafo
     void agregarArista(const Nodo& origen, const Nodo& destino, int costoDeViaje,double horasViaje);
@@ -25,6 +26,8 @@ public:
 
     // Función para mostrar las aristas del grafo
     void mostrarAristas();
+    //
+    vector<Nodo> getAdyacencia(const Nodo& nodo);
 };
 
 #endif
