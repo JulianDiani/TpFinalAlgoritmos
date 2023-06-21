@@ -15,7 +15,7 @@ public:
     // Función para agregar un nodo al grafo
     void agregarNodo(const Nodo& nodo);
 
-    bool buscarNodo(string codigo);
+    bool encontreNodo(string codigo);
 
     // Función para agregar una arista al grafo
     void agregarArista(const Nodo& origen, const Nodo& destino, int costoDeViaje,double horasViaje);

@@ -9,7 +9,7 @@ void Grafo::agregarArista(const Nodo& origen, const Nodo& destino, int costoDeVi
     aristas.push_back(arista);
 }
 
-bool Grafo::buscarNodo(string codigo){
+bool Grafo::encontreNodo(string codigo){
     bool salida=false;
     for (const auto& nodo:nodos){
         if(nodo.codigoOrigen==codigo){

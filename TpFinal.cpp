@@ -13,17 +13,6 @@ using namespace std;
 
 int cantidadDeClaves = 100; // Tamaño de registros estimados
 int tamanioDeTabla = 127;  // Tamaño de tabla
-
-// struct Estaciones { // Estructura de estaciones
-//     string codigo;
-//     string nombre;
-//     string ciudad;
-//     int cantSurtidores;
-//     double litrosSurtidor;
-//     string tipoCombustible;
-// };
-
-
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
 string archivoViajes= "viajes.txt";
 vector<Estacion> tablaHashing(tamanioDeTabla); // Tabla de hashing
@@ -42,23 +31,13 @@ bool verificarSalir(string dato) {
     return dato != "salir";
 }
 
-// void mostrarDatosEstacion(Estacion estacion){
-//     cout<<"Codigo de la estacion: "<< estacion.getCodigo<<endl<<"Nombre: "<< estacion.getNombre<<endl<<"Ciudad: "<< estacion.getCiudad<<endl<<
-//     "Cantidad de surtidores: "<< estacion.cantSurtidores<<endl<< "Litros por surtidor: "<<estacion.litrosSurtidor<<endl<<"Tipo de combustible: "<<estacion.tipoCombustible<<endl;
-// }
+
 
 bool noEstaOcupado (int posicion){
     return tablaHashing[posicion].getCodigo().empty();
 }
 
-// Estaciones crearEstacion (string codigo, string nombre, string ciudad, int cantSurtidores, 
-// double litrosSurtidor, string tipoCombustible) {
-//     Estaciones estacionAux;
-//     estacionAux.codigo = codigo;  estacionAux.nombre = nombre;  
-//     estacionAux.ciudad = ciudad;  estacionAux.cantSurtidores = cantSurtidores;  
-//     estacionAux.litrosSurtidor = litrosSurtidor; estacionAux.tipoCombustible = tipoCombustible;
-//     return estacionAux;
-// }
+
 
 char deseaContinuar() {
     char dato;
@@ -97,11 +76,11 @@ int funcionDeHashing(string codigo, int tamanio) {
 // Colision Quadratic probing
 // Si da -1 no encontro posicion
 // Tratamiento colicion para insertar
-int tratarColisionInsertar(int posicion, int tamanio) {
+int tratarColisionInsertar(int posicion, int tamanio) { //// REVISAR SI ANDA BIEN X LAS DUDAS
     int posicionAux, salida = -1;
     for (int i = 1; i < tamanio; i++) {
         posicionAux = posicion + (i * i);
-        if (noEstaOcupado(posicionAux)) {
+        if (noEstaOcupado(posicionAux)|| tablaHashing[posicionAux].getCodigo()=="000000") {
             salida = posicionAux;
             break;
         }
@@ -132,7 +111,7 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
 void insertarEstacion(Estacion estacion, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(estacion.getCodigo(), tamanio);
     //cout << "Pos ini" << posicionInicial << endl;
-    if (noEstaOcupado(posicionInicial)) {
+    if (noEstaOcupado(posicionInicial) || tablaHashing[posicionInicial].getCodigo()=="000000") {
         //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
         tablaHashing[posicionInicial] = estacion;
         //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
@@ -312,12 +291,6 @@ void cargarEstacionesIniciales() {
             Estacion estacionNueva;
 
             if (iss >> codigo >> nombre >> ciudad >> cantSurtidores >> litrosSurtidor >> tipoCombustible) {
-                // estacionNueva.codigo = codigo;
-                // estacionNueva.nombre = nombre;
-                // estacionNueva.ciudad = ciudad;
-                // estacionNueva.cantSurtidores = cantSurtidores;
-                // estacionNueva.litrosSurtidor = litrosSurtidor;
-                // estacionNueva.tipoCombustible = tipoCombustible;
                 estacionNueva.setCodigo(codigo);
                 estacionNueva.setNombre(nombre);
                 estacionNueva.setCiudad(ciudad);
@@ -421,101 +394,6 @@ void mostrarEstacionesV2() {
     }
 }
 
-// DEPRECADO DE ACA PARA ABAJO
-void buscarEstacionPorCodigo()
-{
-    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
-    string codigo;
-    cout << "Ingrese el codigo de la estacion que desea buscar: " << endl;
-    cin >> codigo;
-
-    if (archivo.is_open())
-    {
-        string linea;
-        int nroLinea = 0;
-        bool encontrado = false;
-
-        while (getline(archivo, linea) && !encontrado)
-        {
-            // Procesa la línea leída según tus necesidades
-            nroLinea++;
-            if (linea.find(codigo) != string::npos)
-            {
-                cout << "Elemento encontrado en la línea " << codigo << ": " << linea << endl;
-                encontrado = true;
-                // Puedes realizar cualquier acción adicional que desees cuando encuentres el elemento
-            }
-        }
-        if (!encontrado)
-        {
-            cout << "La estacion ingresada no es valida" << endl;
-        }
-
-        archivo.close();
-    }
-    else
-    {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
-
-void eliminarEstacionPorCodigo()
-{
-    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
-    bool encontrado = false;
-    string codigo;
-    cout << "Ingrese el codigo de la estacion a eliminar: " << endl;
-    cin >> codigo;
-    if (archivo.is_open())
-    {
-        string linea;
-        int nroLinea = 0;
-
-        while (getline(archivo, linea) && !encontrado)
-        {
-            // Procesa la línea leída según tus necesidades
-            nroLinea++;
-            if (linea.find(codigo) != string::npos)
-            {
-                cout << "Elemento encontrado en la línea " << codigo << ": " << linea << std::endl;
-                encontrado = true;
-                // Puedes realizar cualquier acción adicional que desees cuando encuentres el elemento
-            }
-        }
-
-        archivo.close();
-    }
-    else
-    {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
-bool encontrarEstacion(string codigo)
-{
-    ifstream archivo(archivoEstaciones);
-    bool encontrado = false;
-
-    if (archivo.is_open())
-    {
-        string linea;
-        int nroLinea = 0;
-        while (getline(archivo, linea))
-        {
-            nroLinea++;
-            if (linea.find(codigo) != string::npos)
-            {
-                encontrado = true;
-            }
-        }
-        archivo.close();
-    }
-    else
-    {
-        cout << "no se puede abrir" << endl;
-    }
-    return encontrado;
-}
-
 
 //ARRANCA GRAFOS
 Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
@@ -524,13 +402,13 @@ Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
     for(const auto viaje : vectorViajes){
          Nodo nodoOrigen(viaje.getCodigoPartida());
          Nodo nodoDestino(viaje.getCodigoDestino());
-        if(grafoViajes.buscarNodo(viaje.getCodigoPartida())&& grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+        if(grafoViajes.encontreNodo(viaje.getCodigoPartida())&& grafoViajes.encontreNodo(viaje.getCodigoDestino())){
             grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
-        }else if(grafoViajes.buscarNodo(viaje.getCodigoPartida()) && !grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+        }else if(grafoViajes.encontreNodo(viaje.getCodigoPartida()) && !grafoViajes.encontreNodo(viaje.getCodigoDestino())){
             nodoDestino=Nodo(viaje.getCodigoDestino());
             grafoViajes.agregarNodo(nodoDestino);
             grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
-        }else if(!grafoViajes.buscarNodo(viaje.getCodigoPartida()) && grafoViajes.buscarNodo(viaje.getCodigoDestino())){
+        }else if(!grafoViajes.encontreNodo(viaje.getCodigoPartida()) && grafoViajes.encontreNodo(viaje.getCodigoDestino())){
             nodoOrigen=Nodo(viaje.getCodigoPartida());
             grafoViajes.agregarNodo(nodoOrigen);
             grafoViajes.agregarArista(nodoOrigen,nodoDestino,viaje.getCostoViaje(),viaje.getHorasViaje());
@@ -546,34 +424,6 @@ Grafo generarGrafoPesado(vector<Viaje> vectorViajes){
 
 
 
-void darDeAltaEstacion()
-{
-    ofstream archivo(archivoEstaciones, ios::app); // Reemplaza "datos.txt" por el nombre de tu archivo
-    bool encontrado = false;
-    if (archivo.is_open())
-    {
-        string codigo, ciudad, datos;
-        cout << "Ingrese el codigo de la estacion: " << endl;
-        cin >> codigo;
-        while (encontrarEstacion(codigo))
-        {
-            cout << "El codigo ingresado ya existe\nIngresa otro codigo: " << endl;
-            cin >> codigo;
-        }
-        cout << "Ingrese la ciudad de la estacion: " << endl;
-        cin >> ciudad;
-        datos = codigo + " " + ciudad;
-        archivo << datos << endl;
-        archivo.close();
-        cout << "Datos escritos en el archivo correctamente." << endl;
-    }
-    else
-    {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
-
-// DEPRECADO DE ACA PARA ARRIBA
 
 
 
@@ -612,7 +462,7 @@ void mostrarMenu()
     }
     cout << "Gracias por utilizar nuestro sistema!" << endl;
 }
-
+// PREGUNTAS: ¿Como recorremos el Grafo? ¿Podemos hacer instancias de clase asi (Nodo(bla,bla,bla)) o tiene que ser con New?¿Los nodos tienen que ser estaciones o no es necesario?
 int main() {   
     cargarEstacionesIniciales();
     cargarViajesIniciales();
@@ -620,24 +470,6 @@ int main() {
     prueba=generarGrafoPesado(vectorViajes);
     prueba.mostrarNodos();
     prueba.mostrarAristas();
-
-    // Viaje viajesito2;
-    // viajesito2.setCodigoPartida("PRUEBA1234");
-    //  viajesito2.setCodigoDestino("prueba24");
-    //  viajesito2.setCostoViaje(120);
-    //  viajesito2.setHorasViaje(12.5);
-    // Grafo grafito;
-    // Nodo prueba(viajesito.getCodigoPartida());
-    // Nodo prueba2(viajesito2.getCodigoPartida());
-    // grafito.agregarNodo(prueba);
-    // grafito.agregarNodo(prueba2);
-    // grafito.agregarArista(prueba,prueba2,3,3.1);
-    // //cout << "Data" << tablaHashing[18].codigo << endl;
-    // //cout << "Data01" << tablaHashing[19].codigo << endl;
-    // //cout << "Data02" << tablaHashing[22].codigo << endl;
-    // //buscarEstacion(tablaHashing[19].codigo, tamanioDeTabla);
-    // grafito.mostrarNodos();
-    // grafito.mostrarAristas();
     mostrarMenu();
 
     return 0;
