@@ -1,15 +1,15 @@
 #ifndef NODO_H
 #define NODO_H
-using namespace std;
-#include <string>
 
+#include "Estacion.h"
 
 class Nodo {
 public:
-    string codigoOrigen;
+    Estacion* estacion;  // Puntero a Estacion
 
     // Constructor de la clase Nodo
-    Nodo(string codigoOrigen);
+    Nodo(Estacion* estacion);
 };
 
 #endif
+

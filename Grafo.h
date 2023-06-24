@@ -6,28 +6,30 @@
 #include "Nodo.h"
 #include "Arista.h"
 
+using namespace std;
 class Grafo {
 private:
-    std::vector<Nodo> nodos; // Vector de nodos
-    std::vector<Aristas> aristas; // Vector de aristas
+    vector<Nodo*> nodos; // Vector de punteros a Nodo
+    vector<Aristas*> aristas; // Vector de aristas
 
 public:
     // Función para agregar un nodo al grafo
-    void agregarNodo(const Nodo& nodo);
+    void agregarNodo(Estacion* estacion);
 
-    bool encontreNodo(string codigo);
-    Nodo encontreNodo2(string codigo);
+    bool encontreNodo(const string& codigo);
+    Nodo encontreNodo2(const string& codigo);
 
     // Función para agregar una arista al grafo
-    void agregarArista(const Nodo& origen, const Nodo& destino, int costoDeViaje,double horasViaje);
+    void agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje);
 
     // Función para mostrar los nodos del grafo
     void mostrarNodos();
 
     // Función para mostrar las aristas del grafo
     void mostrarAristas();
-    //
-    vector<Nodo> getAdyacencia(const Nodo& nodo);
+    
+    // Función para obtener los nodos adyacentes a un nodo dado
+    vector<Nodo*> getAdyacencia(Nodo* nodo);
 };
 
 #endif

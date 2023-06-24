@@ -3,4 +3,4 @@
 using namespace std;
 
 // Implementación del constructor de la clase Nodo
-Nodo::Nodo(string codigoOrigen) : codigoOrigen(codigoOrigen) {} // cambiar codigo por puntero a estacion
+Nodo::Nodo(Estacion* estacion) : estacion(estacion) {} // cambiar codigo por puntero a estacion

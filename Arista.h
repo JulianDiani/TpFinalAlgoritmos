@@ -5,13 +5,14 @@
 
 class Aristas {
 public:
-    Nodo origen;
-    Nodo destino;
+    Nodo* origen;
+    Nodo* destino;
     int costoDeViaje;
     double horasViaje;
 
     // Constructor de la clase Aristas
-    Aristas(const Nodo& src, const Nodo& dest, int w,double h);
+    Aristas(Nodo* src, Nodo* dest, int w, double h);
 };
 
 #endif
+
