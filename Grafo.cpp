@@ -25,12 +25,11 @@ bool Grafo::encontreNodo(const string& codigo) {
 
 
 
-Nodo Grafo::encontreNodo2(const string& codigo) {
-    Nodo salida(nullptr);
-    for (const auto& nodo : nodos) {
-        if (nodo->estacion->getCodigo() == codigo) {
-            salida.estacion = nodo->estacion;
-            break;
+Nodo* Grafo::encontreNodo2(string codigo){
+    Nodo* salida=nullptr;
+    for (const auto& nodo:nodos){
+        if(nodo->estacion->getCodigo()==codigo){
+            salida=nodo;
         }
     }
     return salida;

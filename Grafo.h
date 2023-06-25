@@ -17,7 +17,7 @@ public:
     void agregarNodo(Estacion* estacion);
 
     bool encontreNodo(const string& codigo);
-    Nodo encontreNodo2(const string& codigo);
+    Nodo* encontreNodo2( string codigo);
 
     // Función para agregar una arista al grafo
     void agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje);
