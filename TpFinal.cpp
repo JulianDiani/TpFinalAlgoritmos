@@ -614,6 +614,7 @@ int main() {
     // }
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
     //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
+     // COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
     mostrarMenu();
 
     return 0;
