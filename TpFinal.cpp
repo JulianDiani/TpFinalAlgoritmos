@@ -8,6 +8,7 @@
 #include"Arista.h"
 #include"Nodo.h"
 #include"Viaje.h"
+#include"Camion.h"
 
 using namespace std;
 
@@ -669,14 +670,14 @@ void mostrarMenu()
 //
 
 int main() {   
-    cargarEstacionesIniciales();
-    Grafo prueba=cargarViajesInicialesEnGrafo();
-    for(int i=0;i<vectorViajes.size();i++){
-        cout<<vectorViajes[i].getCodigoDestino()<<endl;
-    }
-    for(int i=0;i<vectorViajes.size();i++){
-        cout<<vectorViajes[i].getCodigoPartida();
-    }
+    //cargarEstacionesIniciales();
+    //Grafo prueba=cargarViajesInicialesEnGrafo();
+    //for(int i=0;i<vectorViajes.size();i++){
+    //    cout<<vectorViajes[i].getCodigoDestino()<<endl;
+    //}
+    //for(int i=0;i<vectorViajes.size();i++){
+    //    cout<<vectorViajes[i].getCodigoPartida();
+    //}
     // cout<<"lalala";
     // //Estacion* estacionPrueba=retornarEstacion("BAS001",tamanioDeTabla);
     // cout<<"lalala"<<estacionPrueba->getCodigo();
@@ -685,8 +686,8 @@ int main() {
     
     // prueba=generarGrafoPesado(vectorViajes);
     // cout<<"Pase2"<<endl;
-    prueba.mostrarNodos();
-    prueba.mostrarAristas();
+    //prueba.mostrarNodos();
+    //prueba.mostrarAristas();
     // Nodo nodoAProbar=prueba.encontreNodo2("BAS001");
     // vector<Nodo> vecNodos=prueba.getAdyacencia(nodoAProbar);
     // for(const auto nodo : vecNodos){
@@ -695,7 +696,12 @@ int main() {
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
     //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
      // COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
+    Camion camionPrueba = Camion();
+    //camionPrueba.setNombreChofer("Pedro");
+    //camionPrueba.setLitrosDeCombustible(2400.0);
+    cout <<"Camion nombre: " <<camionPrueba.getNombreChofer() <<" Camion litros: " <<camionPrueba.getLitrosCombustible()<<endl;
+    
     mostrarMenu();
-
     return 0;
+        
 }
