@@ -347,6 +347,75 @@ void cargarViajesIniciales() {
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
+Grafo cargarViajesInicialesEnGrafo() {
+    ifstream archivo(archivoViajes);
+    bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
+    Grafo grafoNuevo;
+    Nodo* nodoOrigen;
+    Nodo* nodoDestino;
+    if (archivo.is_open()) {
+        string linea;
+        while (getline(archivo, linea)) {
+            istringstream iss(linea);
+            string codigoOrigen;
+            string codigoDestino;
+            int costoViaje;
+            double horasViaje;
+            Viaje viajeNuevo;
+            cargarEnGrafo = true;
+            
+           
+                if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
+                    if (!verificarCodigo(codigoOrigen)||retornarEstacion(codigoOrigen,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
+                        cout<<"La estacion origen no se puede referenciar porque no existe estacion con ese codigo "<<endl;
+                        cargarEnGrafo = false;
+                    }
+                    if (!verificarCodigo(codigoDestino)||retornarEstacion(codigoDestino,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
+                        cout<<"La estacion destino no se puede referenciar porque no existe estacion con ese codigo "<<endl;
+                        cargarEnGrafo = false;
+                    }
+                    if (cargarEnGrafo) {
+                        if (grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+                        nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
+                        nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
+                        grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                        } else if (grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
+                            nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
+                            nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
+                            grafoNuevo.agregarNodo(nodoDestino->estacion);
+                            cout<<"entrealsegundo"<<endl;
+                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                        } else if (!grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+                            nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
+                            nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
+                            grafoNuevo.agregarNodo(nodoOrigen->estacion);
+                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                        } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
+           
+                            nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
+                            nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
+                            cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
+                            grafoNuevo.agregarNodo(nodoOrigen->estacion);
+                            grafoNuevo.agregarNodo(nodoDestino->estacion);
+                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                        }
+                                        // viajeNuevo.setCodigoPartida(codigoOrigen);
+                        // viajeNuevo.setCodigoDestino(codigoDestino);
+                        // viajeNuevo.setCostoViaje(costoViaje);
+                        // viajeNuevo.setHorasViaje(horasViaje);
+                        // vectorViajes.push_back(viajeNuevo);    
+                    }
+                
+            }
+        }
+        archivo.close();
+        
+    }
+    return grafoNuevo;
+    // else {
+    //     cout << "No se pudo abrir el archivo." << endl;
+    // }
+}
 
 
 // mostrarEstaciones VIGENTE 
@@ -601,21 +670,21 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
-    cargarViajesIniciales();
+    Grafo prueba=cargarViajesInicialesEnGrafo();
     for(int i=0;i<vectorViajes.size();i++){
         cout<<vectorViajes[i].getCodigoDestino()<<endl;
     }
     for(int i=0;i<vectorViajes.size();i++){
         cout<<vectorViajes[i].getCodigoPartida();
     }
-    cout<<"lalala";
-    Estacion* estacionPrueba=retornarEstacion("BAS001",tamanioDeTabla);
-    cout<<"lalala"<<estacionPrueba->getCodigo();
+    // cout<<"lalala";
+    // //Estacion* estacionPrueba=retornarEstacion("BAS001",tamanioDeTabla);
+    // cout<<"lalala"<<estacionPrueba->getCodigo();
     
-    cout<<"Pase"<<endl;
-    Grafo prueba;
-    prueba=generarGrafoPesado(vectorViajes);
-    cout<<"Pase2"<<endl;
+    // cout<<"Pase"<<endl;
+    
+    // prueba=generarGrafoPesado(vectorViajes);
+    // cout<<"Pase2"<<endl;
     prueba.mostrarNodos();
     prueba.mostrarAristas();
     // Nodo nodoAProbar=prueba.encontreNodo2("BAS001");
