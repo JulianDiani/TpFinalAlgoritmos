@@ -4,11 +4,11 @@
 #include <vector>
 #include <sstream>
 #include "Estacion.h"
-#include"Grafo.h"
-#include"Arista.h"
-#include"Nodo.h"
-#include"Viaje.h"
-#include"Camion.h"
+#include "Grafo.h"
+#include "Arista.h"
+#include "Nodo.h"
+#include "Viaje.h"
+#include "Camion.h"
 
 using namespace std;
 
@@ -230,7 +230,6 @@ Estacion* retornarEstacion(string codigo, int tamanio) {
 }
 
 
-
 void buscarEstacionPorCodigo() {  
     string codigo;
     cout<<"Ingrese el codigo de la estacion a buscar: "<<endl;
@@ -275,8 +274,7 @@ void eliminarEstacion(string codigo, int tamanio) {
     }
 }
 
-
-// Cargar txts estaciones- viajes.
+// Cargar txts estaciones - viajes.
 void cargarEstacionesIniciales() {
     ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
     if (archivo.is_open()) {
@@ -307,7 +305,7 @@ void cargarEstacionesIniciales() {
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
-
+//DEPRECADO CARGAR VIAJES INICIALES
 void cargarViajesIniciales() {
     ifstream archivo(archivoViajes);
     bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -348,6 +346,8 @@ void cargarViajesIniciales() {
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
+
+//VIGENTE CARGAR VIAJES INICIALES
 Grafo cargarViajesInicialesEnGrafo() {
     ifstream archivo(archivoViajes);
     bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
@@ -363,61 +363,47 @@ Grafo cargarViajesInicialesEnGrafo() {
             int costoViaje;
             double horasViaje;
             Viaje viajeNuevo;
-            cargarEnGrafo = true;
-            
-           
-                if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
-                    if (!verificarCodigo(codigoOrigen)||retornarEstacion(codigoOrigen,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
-                        cout<<"La estacion origen no se puede referenciar porque no existe estacion con ese codigo "<<endl;
-                        cargarEnGrafo = false;
-                    }
-                    if (!verificarCodigo(codigoDestino)||retornarEstacion(codigoDestino,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
-                        cout<<"La estacion destino no se puede referenciar porque no existe estacion con ese codigo "<<endl;
-                        cargarEnGrafo = false;
-                    }
-                    if (cargarEnGrafo) {
-                        if (grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+            cargarEnGrafo = true;     
+            if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
+                if (!verificarCodigo(codigoOrigen)||retornarEstacion(codigoOrigen,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
+                    cout<<"La estacion origen no se puede referenciar porque no existe estacion con ese codigo "<<endl;
+                    cargarEnGrafo = false;
+                }
+                if (!verificarCodigo(codigoDestino)||retornarEstacion(codigoDestino,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
+                    cout<<"La estacion destino no se puede referenciar porque no existe estacion con ese codigo "<<endl;
+                    cargarEnGrafo = false;
+                }
+                if (cargarEnGrafo) {
+                    if (grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+                    nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
+                    nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
+                    grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                    } else if (grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
                         nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
-                        nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
+                        nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
+                        grafoNuevo.agregarNodo(nodoDestino->estacion);
+                        //cout<<"entrealsegundo"<<endl;
                         grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
-                        } else if (grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
-                            nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
-                            nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
-                            grafoNuevo.agregarNodo(nodoDestino->estacion);
-                            cout<<"entrealsegundo"<<endl;
-                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
-                        } else if (!grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
-                            nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
-                            nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
-                            grafoNuevo.agregarNodo(nodoOrigen->estacion);
-                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
-                        } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
-           
-                            nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
-                            nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
-                            cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
-                            grafoNuevo.agregarNodo(nodoOrigen->estacion);
-                            grafoNuevo.agregarNodo(nodoDestino->estacion);
-                            grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
-                        }
-                                        // viajeNuevo.setCodigoPartida(codigoOrigen);
-                        // viajeNuevo.setCodigoDestino(codigoDestino);
-                        // viajeNuevo.setCostoViaje(costoViaje);
-                        // viajeNuevo.setHorasViaje(horasViaje);
-                        // vectorViajes.push_back(viajeNuevo);    
-                    }
-                
+                    } else if (!grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+                        nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
+                        nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
+                        grafoNuevo.agregarNodo(nodoOrigen->estacion);
+                        grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                    } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {           
+                        nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
+                        nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
+                        //cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
+                        grafoNuevo.agregarNodo(nodoOrigen->estacion);
+                        grafoNuevo.agregarNodo(nodoDestino->estacion);
+                        grafoNuevo.agregarArista(nodoOrigen, nodoDestino, costoViaje, horasViaje);
+                    }                                        
+                }
             }
         }
-        archivo.close();
-        
+    archivo.close();        
     }
     return grafoNuevo;
-    // else {
-    //     cout << "No se pudo abrir el archivo." << endl;
-    // }
 }
-
 
 // mostrarEstaciones VIGENTE 
 void mostrarEstaciones(){
@@ -425,56 +411,8 @@ void mostrarEstaciones(){
         if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
             estacion.getDatosEstacion();
         }
-}
-}
-// mostrarEstacionesV2 - buscarEstacionesYMostrar DEPRECADO 
-// Mostrar estaciones por hashing
-void buscarEstacionesYMostrar(string codigo, int tamanio){
-    int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    Estacion estacionAux = tablaHashing[posicionInicial];
-    
-    if (!noEstaOcupado(posicionInicial) && estacionAux.getCodigo() == codigo) {
-        // mostrarDatosEstacion(estacionAux);
-        estacionAux.getDatosEstacion();        
-    }
-    else if(!noEstaOcupado(posicionInicial)) {
-        posicionColision = tratarColisionBuscar(posicionInicial, tamanio, codigo);
-        
-        if (posicionColision != (-1)) {
-            estacionAux = tablaHashing[posicionColision];
-            // mostrarDatosEstacion(estacionAux);
-            estacionAux.getDatosEstacion();  
-        }
-        else {
-            cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
-        }
-    }else {
-        cout << "No se pudo encontrar ninguna estacion con ese codigo" << endl;
     }
 }
-
-void mostrarEstacionesV2() {
-    // PROBLEMA: Aca tenemos que agregar las estaciones insertadas al txt porque sino se van a mostrar las nuevas
-    // o la otra opcion es crear una lista de codigos a partir de txt en primera instancia y si insertas una nueva por 
-    // interface la agregas a esa lista. Despues leemos esa lista de codigos.
-    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo 
-    if (archivo.is_open()) { // ACA ESTO ME PARECE Q NO HACE FALTA,XQ NOSOTROS INSTANCIAMOS TODAS LAS ESTACIONES DEL TXT EN OBJETOS,ACA TENDRIAMOS QUE RECORRER LA TABLA DE HASH Y MOSTRARLOS NOMAS
-        string linea, codigo;
-        cout<<"Las estaciones registradas son: "<<endl;
-        while (getline(archivo, linea)) {
-            istringstream iss(linea);
-            if (iss >> codigo){
-                buscarEstacionesYMostrar(codigo, tamanioDeTabla);
-                cout<<"\n";
-            }
-        }
-        archivo.close();
-    }
-    else {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
-
 
 //Grafo pesado original "generar"
 Grafo generarGrafoPesado(const vector<Viaje>& vectorViajes) {
@@ -483,10 +421,7 @@ Grafo generarGrafoPesado(const vector<Viaje>& vectorViajes) {
     Nodo* nodoOrigen;
     Nodo* nodoDestino;
     for (const auto& viaje : vectorViajes) {
-        // Nodo* nodoOrigen = new Nodo(retornarEstacion(viaje.getCodigoPartida(), tamanioDeTabla));
-        // Nodo* nodoDestino = new Nodo(retornarEstacion(viaje.getCodigoDestino(), tamanioDeTabla));
-
-        if (grafoViajes.encontreNodo(viaje.getCodigoPartida()) && grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
+            if (grafoViajes.encontreNodo(viaje.getCodigoPartida()) && grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
             nodoOrigen=grafoViajes.encontreNodo2(viaje.getCodigoPartida());
             nodoDestino=grafoViajes.encontreNodo2(viaje.getCodigoDestino());
             grafoViajes.agregarArista(nodoOrigen, nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje());
@@ -510,13 +445,10 @@ Grafo generarGrafoPesado(const vector<Viaje>& vectorViajes) {
             grafoViajes.agregarNodo(nodoOrigen->estacion);
             grafoViajes.agregarNodo(nodoDestino->estacion);
             grafoViajes.agregarArista(nodoOrigen, nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje());
-        }
-        
-    }
-    
+        }        
+    }    
     return grafoViajes;
 }
-
 
 
 //const int INFINITO = std::numeric_limits<int>::max();
@@ -664,10 +596,8 @@ void mostrarMenu()
 // PREGUNTAS: ¿Como recorremos el Grafo?
 // ¿Podemos hacer instancias de clase asi (Nodo(bla,bla,bla)) o tiene que ser con New?
 //¿Los nodos del grafo tienen que ser estaciones o no es necesario? 
-//¿camion cisterna en que parte entra?????????????????????????????????????????
-//¿Litros y costo de viaje, habla de pesos y despues de litros.. no se entiende
-// Tema menu¿Hacemos un menu general? Onda 1- Menu estaciones 2-Menu Viajes o que onda?
-//
+
+// COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
 
 int main() {   
     //cargarEstacionesIniciales();
@@ -695,12 +625,11 @@ int main() {
     // }
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
     //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
-     // COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
-    Camion camionPrueba = Camion();
+     
+    //Camion camionPrueba = Camion();
     //camionPrueba.setNombreChofer("Pedro");
     //camionPrueba.setLitrosDeCombustible(2400.0);
-    cout <<"Camion nombre: " <<camionPrueba.getNombreChofer() <<" Camion litros: " <<camionPrueba.getLitrosCombustible()<<endl;
-    
+    //cout <<"Camion nombre: " <<camionPrueba.getNombreChofer() <<" Camion litros: " <<camionPrueba.getLitrosCombustible()<<endl;
     mostrarMenu();
     return 0;
         
