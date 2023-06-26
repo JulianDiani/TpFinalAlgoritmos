@@ -30,6 +30,9 @@ public:
     
     // Función para obtener los nodos adyacentes a un nodo dado
     vector<Nodo*> getAdyacencia(Nodo* nodo);
+    int getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2);
+    vector<Aristas*> getAristas(Nodo* nodo);
+    double getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2);
 };
 
 #endif

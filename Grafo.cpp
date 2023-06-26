@@ -25,6 +25,8 @@ bool Grafo::encontreNodo(const string& codigo) {
 
 
 
+
+
 Nodo* Grafo::encontreNodo2(string codigo){
     Nodo* salida=nullptr;
     for (const auto& nodo:nodos){
@@ -68,4 +70,34 @@ vector<Nodo*> Grafo::getAdyacencia(Nodo* nodo) {
     
     return adyacentes;
 }
+vector<Aristas*> Grafo::getAristas(Nodo* nodo){  //Devuelve un vector con todas las aristas del nodo.
+    vector<Aristas*> aristasDeNodo;
+    for (const auto& arista : aristas) {
+        if (arista->origen->estacion->getCodigo() == nodo->estacion->getCodigo()) {
+            aristasDeNodo.push_back(arista);
+        }
+    }
+    
+    return aristasDeNodo;
+}
+
+
+int Grafo::getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2){
+    for(auto arista: aristas){
+        if(arista->origen->estacion->getCodigo()==nodo1->estacion->getCodigo() && arista->destino->estacion->getCodigo()==nodo2->estacion->getCodigo()){
+            return arista->costoDeViaje;
+        }    
+    }
+    return 0;
+}
+double Grafo::getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2){
+   for(auto arista: aristas){
+        if(arista->origen->estacion->getCodigo()==nodo1->estacion->getCodigo() && arista->destino->estacion->getCodigo()==nodo2->estacion->getCodigo()){
+            return arista->horasViaje;
+        }    
+    }
+    return 0;
+}
+
+
 

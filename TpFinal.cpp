@@ -600,8 +600,8 @@ void mostrarMenu()
 // COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
 
 int main() {   
-    //cargarEstacionesIniciales();
-    //Grafo prueba=cargarViajesInicialesEnGrafo();
+    cargarEstacionesIniciales();
+    Grafo prueba=cargarViajesInicialesEnGrafo();
     //for(int i=0;i<vectorViajes.size();i++){
     //    cout<<vectorViajes[i].getCodigoDestino()<<endl;
     //}
@@ -618,11 +618,18 @@ int main() {
     // cout<<"Pase2"<<endl;
     //prueba.mostrarNodos();
     //prueba.mostrarAristas();
-    // Nodo nodoAProbar=prueba.encontreNodo2("BAS001");
-    // vector<Nodo> vecNodos=prueba.getAdyacencia(nodoAProbar);
-    // for(const auto nodo : vecNodos){
-    //     cout<<"Adayacentes"<<nodo.codigoOrigen<<endl;
-    // }
+    Nodo* nodoAProbar=prueba.encontreNodo2("BAS001");
+    Nodo* nodoAProbar2=prueba.encontreNodo2("COR002");
+    vector<Nodo*> vecNodos=prueba.getAdyacencia(nodoAProbar);
+     for( auto nodo : vecNodos){
+         cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
+     }
+
+    int costoEntreNodos=prueba.getCostoEntre_Y_(nodoAProbar,nodoAProbar2);
+    cout<<"el costo entre los nodos 1 y 2 es: "<<costoEntreNodos<<endl;
+    double horasEntreNodos=prueba.getHorasEntre_Y_(nodoAProbar,nodoAProbar2);
+    cout<<"las horas entre los nodos 1 y 2 es: "<<horasEntreNodos<<endl;
+
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
     //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
      
