@@ -5,14 +5,16 @@
 #include <iostream>
 #include "Nodo.h"
 #include "Arista.h"
+#include<unordered_set>
 
 using namespace std;
 class Grafo {
 private:
     vector<Nodo*> nodos; // Vector de punteros a Nodo
-    vector<Aristas*> aristas; // Vector de aristas
+    vector<Aristas*> aristas;// Vector de aristas
 
 public:
+
     // Función para agregar un nodo al grafo
     void agregarNodo(Estacion* estacion);
 
@@ -20,7 +22,7 @@ public:
     Nodo* encontreNodo2( string codigo);
 
     // Función para agregar una arista al grafo
-    void agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje);
+    void agregarArista(Aristas* arista);
 
     // Función para mostrar los nodos del grafo
     void mostrarNodos();
@@ -33,6 +35,8 @@ public:
     int getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2);
     vector<Aristas*> getAristas(Nodo* nodo);
     double getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2);
+    vector<Aristas*>getAristas2();
+    bool hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados);
 };
 
 #endif

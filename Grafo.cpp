@@ -1,4 +1,5 @@
 #include "Grafo.h"
+#include<unordered_set>
 
 using namespace std;
 
@@ -9,10 +10,13 @@ void Grafo::agregarNodo(Estacion* estacion) {
 
 
 
-void Grafo::agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje) {
-    Aristas* arista = new Aristas(origen, destino, costoDeViaje, horasViaje);
-    aristas.push_back(arista);
-}
+ void Grafo::agregarArista(Aristas* arista) {
+        aristas.push_back(arista);
+    }
+// void Grafo::agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje) {
+//     Aristas* arista = new Aristas(origen, destino, costoDeViaje, horasViaje);
+//     aristas.push_back(arista);
+// }
 bool Grafo::encontreNodo(const string& codigo) {
     for (const auto& nodoPtr : nodos) {
         if (nodoPtr->estacion->getCodigo() == codigo) {
@@ -97,6 +101,27 @@ double Grafo::getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2){
         }    
     }
     return 0;
+}
+vector<Aristas*>Grafo:: getAristas2() {
+        return aristas;
+    }
+bool Grafo::hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados) {
+    if (nodoActual == nodoDestino) {
+        return true;
+    }
+
+    visitados.insert(nodoActual);
+
+    vector<Nodo*> adyacentes = getAdyacencia(nodoActual);
+    for (Nodo* adyacente : adyacentes) {
+        if (visitados.find(adyacente) == visitados.end()) {
+            if (hayCaminoDFS(adyacente, nodoDestino, visitados)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 }
 
 
