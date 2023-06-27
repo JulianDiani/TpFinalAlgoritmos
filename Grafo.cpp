@@ -123,6 +123,50 @@ bool Grafo::hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set
 
     return false;
 }
+#include <queue>
+#include <unordered_map>
+#include <limits>
+
+struct NodoDistancia {
+    Nodo* nodo;
+    int distancia;
+
+    bool operator<(const NodoDistancia& other) const {
+        return distancia > other.distancia;
+    }
+};
+
+std::unordered_map<Nodo*, int> Grafo::dijkstra(Nodo* nodoInicial) {
+    std::unordered_map<Nodo*, int> distancias;
+    for (const auto& nodo : nodos) {
+        distancias[nodo] = std::numeric_limits<int>::max();
+    }
+    distancias[nodoInicial] = 0;
+
+    std::priority_queue<NodoDistancia> cola;
+    cola.push({nodoInicial, 0});
+
+    while (!cola.empty()) {
+        NodoDistancia actual = cola.top();
+        cola.pop();
+
+        if (actual.distancia > distancias[actual.nodo]) {
+            continue;
+        }
+
+        for (const auto& arista : getAristas(actual.nodo)) {
+            int nuevaDistancia = distancias[actual.nodo] + arista->costoDeViaje;
+            if (nuevaDistancia < distancias[arista->destino]) {
+                distancias[arista->destino] = nuevaDistancia;
+                cola.push({arista->destino, nuevaDistancia});
+            }
+        }
+    }
+
+    return distancias;
+}
+
+
 
 
 

@@ -1,58 +1,29 @@
 #include <iostream>
 #include <unordered_set>
 #include <queue>
-#include <vector>
-#include <string>
 
-class Nodo {
-public:
-    std::string codigo;
-
-    Nodo(std::string codigo) : codigo(codigo) {}
+struct Estacion {
+    int id;
+    // Añade aquí cualquier otra información relacionada con una estación
 };
 
-class Arista {
-public:
-    Nodo* origen;
-    Nodo* destino;
-
-    Arista(Nodo* origen, Nodo* destino) : origen(origen), destino(destino) {}
+struct Nodo {
+    Estacion* estacion;
+    std::unordered_set<Nodo*> adyacentes;
 };
 
-class Grafo {
-private:
-    std::vector<Nodo*> nodos;
-    std::vector<Arista*> aristas;
+using Grafo = std::unordered_set<Nodo*>;
 
-public:
-    void agregarNodo(Nodo* nodo) {
-        nodos.push_back(nodo);
-    }
-
-    void agregarArista(Arista* arista) {
-        aristas.push_back(arista);
-    }
-
-    std::vector<Nodo*> getNodos() {
-        return nodos;
-    }
-
-    std::vector<Arista*> getAristas() {
-        return aristas;
-    }
-};
-
-bool hayCaminoDFS(Grafo& grafo, Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*> visitados) {
+bool hayCaminoDFS(Grafo& grafo, Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados) {
     if (nodoActual == nodoDestino) {
         return true;
     }
 
     visitados.insert(nodoActual);
 
-    std::vector<Arista*> aristas = grafo.getAristas();
-    for (Arista* arista : aristas) {
-        if (arista->origen == nodoActual && visitados.find(arista->destino) == visitados.end()) {
-            if (hayCaminoDFS(grafo, arista->destino, nodoDestino, visitados)) {
+    for (Nodo* adyacente : nodoActual->adyacentes) {
+        if (visitados.find(adyacente) == visitados.end()) {
+            if (hayCaminoDFS(grafo, adyacente, nodoDestino, visitados)) {
                 return true;
             }
         }
@@ -62,8 +33,8 @@ bool hayCaminoDFS(Grafo& grafo, Nodo* nodoActual, Nodo* nodoDestino, std::unorde
 }
 
 bool hayCaminoBFS(Grafo& grafo, Nodo* nodoOrigen, Nodo* nodoDestino) {
-    std::unordered_set<Nodo*> visitados;
     std::queue<Nodo*> cola;
+    std::unordered_set<Nodo*> visitados;
 
     cola.push(nodoOrigen);
     visitados.insert(nodoOrigen);
@@ -76,11 +47,10 @@ bool hayCaminoBFS(Grafo& grafo, Nodo* nodoOrigen, Nodo* nodoDestino) {
             return true;
         }
 
-        std::vector<Arista*> aristas = grafo.getAristas();
-        for (Arista* arista : aristas) {
-            if (arista->origen == nodoActual && visitados.find(arista->destino) == visitados.end()) {
-                cola.push(arista->destino);
-                visitados.insert(arista->destino);
+        for (Nodo* adyacente : nodoActual->adyacentes) {
+            if (visitados.find(adyacente) == visitados.end()) {
+                cola.push(adyacente);
+                visitados.insert(adyacente);
             }
         }
     }
@@ -89,42 +59,59 @@ bool hayCaminoBFS(Grafo& grafo, Nodo* nodoOrigen, Nodo* nodoDestino) {
 }
 
 int main() {
+    // Crea las estaciones
+    Estacion* estacionA = new Estacion{1};
+    Estacion* estacionB = new Estacion{2};
+    Estacion* estacionC = new Estacion{3};
+    Estacion* estacionD = new Estacion{4};
+
+    // Crea los nodos
+    Nodo* nodoA = new Nodo{estacionA};
+    Nodo* nodoB = new Nodo{estacionB};
+    Nodo* nodoC = new Nodo{estacionC};
+    Nodo* nodoD = new Nodo{estacionD};
+
+    // Crea las aristas
+    nodoA->adyacentes.insert(nodoB);
+    nodoB->adyacentes.insert(nodoC);
+    nodoC->adyacentes.insert(nodoD);
+    nodoD->adyacentes.insert(nodoA);
+
+    // Crea el grafo
     Grafo grafo;
+    grafo.insert(nodoA);
+    grafo.insert(nodoB);
+    grafo.insert(nodoC);
+    grafo.insert(nodoD);
 
-    Nodo* nodoA = new Nodo("A");
-    Nodo* nodoB = new Nodo("B");
-    Nodo* nodoC = new Nodo("C");
+    // Prueba la función de búsqueda DFS
+    std::unordered_set<Nodo*> visitadosDFS;
+    bool resultadoDFS = hayCaminoDFS(grafo, nodoA, nodoD, visitadosDFS);
 
-    grafo.agregarNodo(nodoA);
-    grafo.agregarNodo(nodoB);
-    grafo.agregarNodo(nodoC);
-
-    grafo.agregarArista(new Arista(nodoA, nodoB));
-    grafo.agregarArista(new Arista(nodoB, nodoC));
-
-    Nodo* nodoOrigen = nodoA;
-    Nodo* nodoDestino = nodoC;
-
-    if (hayCaminoDFS(grafo, nodoOrigen, nodoDestino, std::unordered_set<Nodo*>())) {
-        std::cout << "Hay un camino entre el nodo origen y el nodo destino utilizando DFS." << std::endl;
+    if (resultadoDFS) {
+        std::cout << "Existe un camino entre el nodo A y el nodo D (DFS)" << std::endl;
     } else {
-        std::cout << "No hay un camino entre el nodo origen y el nodo destino utilizando DFS." << std::endl;
+        std::cout << "No existe un camino entre el nodo A y el nodo D (DFS)" << std::endl;
     }
 
-    if (hayCaminoBFS(grafo, nodoOrigen, nodoDestino)) {
-        std::cout << "Hay un camino entre el nodo origen y el nodo destino utilizando BFS." << std::endl;
+    // Prueba la función de búsqueda BFS
+    bool resultadoBFS = hayCaminoBFS(grafo, nodoA, nodoD);
+
+    if (resultadoBFS) {
+        std::cout << "Existe un camino entre el nodo A y el nodo D (BFS)" << std::endl;
     } else {
-        std::cout << "No hay un camino entre el nodo origen y el nodo destino utilizando BFS." << std::endl;
+        std::cout << "No existe un camino entre el nodo A y el nodo D (BFS)" << std::endl;
     }
 
-    // Liberar memoria de los nodos y aristas
-    for (Nodo* nodo : grafo.getNodos()) {
-        delete nodo;
-    }
-
-    for (Arista* arista : grafo.getAristas()) {
-        delete arista;
-    }
+    // Libera la memoria
+    delete estacionA;
+    delete estacionB;
+    delete estacionC;
+    delete estacionD;
+    delete nodoA;
+    delete nodoB;
+    delete nodoC;
+    delete nodoD;
 
     return 0;
 }

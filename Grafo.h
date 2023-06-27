@@ -6,6 +6,7 @@
 #include "Nodo.h"
 #include "Arista.h"
 #include<unordered_set>
+#include<unordered_map>
 
 using namespace std;
 class Grafo {
@@ -37,6 +38,7 @@ public:
     double getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2);
     vector<Aristas*>getAristas2();
     bool hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados);
+    std::unordered_map<Nodo*, int> dijkstra(Nodo* nodoInicial);
 };
 
 #endif

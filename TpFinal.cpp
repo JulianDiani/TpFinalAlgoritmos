@@ -619,7 +619,7 @@ int main() {
     prueba.mostrarNodos();
     prueba.mostrarAristas();
     Nodo* nodoAProbar=prueba.encontreNodo2("BAS001");
-    Nodo* nodoAProbar2=prueba.encontreNodo2("COR002");
+    Nodo* nodoAProbar2=prueba.encontreNodo2("SAL002");
     vector<Nodo*> vecNodos=prueba.getAdyacencia(nodoAProbar);
      for( auto nodo : vecNodos){
          cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
@@ -635,6 +635,14 @@ int main() {
     }else{
         cout<<"NO HAY CAMINO FLACO"<<endl;
     }
+    unordered_map<Nodo*, int> pruebaDij = prueba.dijkstra(nodoAProbar);
+    for (const auto& elemento : pruebaDij) {
+        Nodo* nodo = elemento.first;
+        int distancia = elemento.second;
+        cout << "Nodo: " << nodo->estacion->getCodigo() << " - Distancia: " << distancia << endl;
+    }
+
+    
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
     //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
      
