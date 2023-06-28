@@ -149,10 +149,10 @@ std::unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
 
         for (const auto& arista : getAristas(actual.nodo)) {
             int nuevaDistancia = distancias[actual.nodo->estacion->getCodigo()] + arista->costoDeViaje;
-            cout<<"nueva distancia: "<<nuevaDistancia<<endl;
-            cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;
+            // cout<<"nueva distancia: "<<nuevaDistancia<<endl;
+            // cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;
             if (nuevaDistancia < distancias[arista->destino->estacion->getCodigo()]) {
-                cout << "Updating distance of node " << arista->destino->estacion->getCodigo() << " from " << distancias[arista->destino->estacion->getCodigo()] << " to " << nuevaDistancia << endl;
+                // cout << "Updating distance of node " << arista->destino->estacion->getCodigo() << " from " << distancias[arista->destino->estacion->getCodigo()] << " to " << nuevaDistancia << endl;
                 distancias[arista->destino->estacion->getCodigo()] = nuevaDistancia;
                 cola.push({arista->destino, nuevaDistancia});
             }

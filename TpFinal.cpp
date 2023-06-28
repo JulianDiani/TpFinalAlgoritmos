@@ -7,7 +7,6 @@
 #include "Grafo.h"
 #include "Arista.h"
 #include "Nodo.h"
-#include "Viaje.h"
 #include "Camion.h"
 
 using namespace std;
@@ -17,7 +16,6 @@ int tamanioDeTabla = 127;  // Tamaño de tabla
 string archivoEstaciones = "estaciones.txt"; // Archivo incial de estaciones
 string archivoViajes= "viajes.txt";
 vector<Estacion> tablaHashing(tamanioDeTabla); // Tabla de hashing
-vector<Viaje> vectorViajes;
 
 // Funciones auxiliares
 bool verificarTipoComb (string tipo) {
@@ -321,7 +319,6 @@ Grafo cargarViajesInicialesEnGrafo() {
             string codigoDestino;
             int costoViaje;
             double horasViaje;
-            Viaje viajeNuevo;
             cargarEnGrafo = true;     
             if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
                 if (!verificarCodigo(codigoOrigen)||retornarEstacion(codigoOrigen,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
