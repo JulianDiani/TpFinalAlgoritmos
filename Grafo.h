@@ -35,9 +35,11 @@ public:
     vector<Nodo*> getAdyacencia(Nodo* nodo);
     int getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2);
     vector<Aristas*> getAristas(Nodo* nodo);
-    unordered_map<string, int> dijkstra(Nodo* nodoInicial);
     void recorridoEnProfundidad(Nodo* origen);
+    unordered_map<string, int> dijkstraPorCosto(Nodo* nodoInicial);
     void mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codigoDestino);
+    unordered_map<string, double> dijkstraPorTiempo(Nodo* nodoInicial);
+    void mostrarDestinosDisponiblesPorTiempo (string codigoOrigen, string codigoDestino);
 };
 
 #endif

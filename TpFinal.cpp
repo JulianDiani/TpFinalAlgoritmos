@@ -392,7 +392,7 @@ void busquedaGrafoPorCosto(Grafo grafo){
     }
 }
 
-void busquedaGrafoPorTiempo(){
+void busquedaGrafoPorTiempo(Grafo grafo){
     string codigoEstacionOrigen;
     string codigoEstacionDestino;
 
@@ -413,7 +413,7 @@ void busquedaGrafoPorTiempo(){
         cin>>codigoEstacionDestino;
     }
     if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
-        cout << "Falta funcionalidad busqueda por tiempo en grafo"<< endl;
+        grafo.mostrarDestinosDisponiblesPorTiempo(codigoEstacionOrigen,codigoEstacionDestino);
     }
 }
 
@@ -464,7 +464,7 @@ void mostrarMenu(Grafo grafo)
             opc = deseaContinuar();                      
         }
          else if (opc == '6'){
-            busquedaGrafoPorTiempo(); 
+            busquedaGrafoPorTiempo(grafo); 
             cout << endl;            
             opc = deseaContinuar();                      
         }
