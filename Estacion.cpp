@@ -4,8 +4,8 @@ using namespace std;
 // Implementación de los constructores
 Estacion::Estacion() {}
 
-Estacion::Estacion(const string& codigo, const string& nombre, const string& ciudad,
-                   int cantSurtidores, double litrosSurtidor, const string& tipoCombustible)
+Estacion::Estacion(const string codigo, const string nombre, const string ciudad,
+                   int cantSurtidores, double litrosSurtidor, const string tipoCombustible)
     : codigo(codigo), nombre(nombre), ciudad(ciudad), cantSurtidores(cantSurtidores),
       litrosSurtidor(litrosSurtidor), tipoCombustible(tipoCombustible) {
 }

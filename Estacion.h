@@ -3,32 +3,33 @@
 
 #include <iostream>
 #include <string>
+using namespace std;
 
 class Estacion {
 private:
-    std::string codigo;
-    std::string nombre;
-    std::string ciudad;
+    string codigo;
+    string nombre;
+    string ciudad;
     int cantSurtidores;
     double litrosSurtidor;
-    std::string tipoCombustible;
+    string tipoCombustible;
 
 public:
     // Constructores
     Estacion(); // Constructor por defecto
 
-    Estacion(const std::string& codigo, const std::string& nombre, const std::string& ciudad,
-             int cantSurtidores, double litrosSurtidor, const std::string& tipoCombustible);
+    Estacion(const string codigo, const string nombre, const string ciudad,
+             int cantSurtidores, double litrosSurtidor, const string tipoCombustible);
 
     // Getters y setters
-    std::string getCodigo() const;
-    void setCodigo(const std::string& codigo);
+    string getCodigo() const;
+    void setCodigo(const string& codigo);
 
-    std::string getNombre() const;
-    void setNombre(const std::string& nombre);
+    string getNombre() const;
+    void setNombre(const string& nombre);
 
-    std::string getCiudad() const;
-    void setCiudad(const std::string& ciudad);
+    string getCiudad() const;
+    void setCiudad(const string& ciudad);
 
     int getCantSurtidores() const;
     void setCantSurtidores(int cantSurtidores);
@@ -36,8 +37,8 @@ public:
     double getLitrosSurtidor() const;
     void setLitrosSurtidor(double litrosSurtidor);
 
-    std::string getTipoCombustible() const;
-    void setTipoCombustible(const std::string& tipoCombustible);
+    string getTipoCombustible() const;
+    void setTipoCombustible(const string& tipoCombustible);
 
     void getDatosEstacion() const;
 };

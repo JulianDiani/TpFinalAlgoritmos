@@ -208,7 +208,8 @@ void buscarEstacion(string codigo, int tamanio){
 // Buscar estacion con hashing devuelve estacion validar contra empty
 Estacion* retornarEstacion(string codigo, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    Estacion* estacionAux = nullptr;
+    Estacion* estacionAux = new Estacion();
+    //Estacion* estacionAux = nullptr;
     
     if (!noEstaOcupado(posicionInicial)) {
         estacionAux = &tablaHashing[posicionInicial];
@@ -220,7 +221,7 @@ Estacion* retornarEstacion(string codigo, int tamanio) {
                 estacionAux = nullptr;
             }
         }
-    }    
+    }   
     return estacionAux;
 }
 
@@ -305,8 +306,8 @@ Grafo cargarViajesInicialesEnGrafo() {
     ifstream archivo(archivoViajes);
     bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
     Grafo grafoNuevo;
-    Nodo* nodoOrigen=new Nodo(nullptr);
-    Nodo* nodoDestino=new Nodo(nullptr);
+    Nodo* nodoOrigen;
+    Nodo* nodoDestino;
     if (archivo.is_open()) {
         string linea;
         while (getline(archivo, linea)) {
@@ -327,32 +328,43 @@ Grafo cargarViajesInicialesEnGrafo() {
                 }
                 if (cargarEnGrafo) {
                     if (grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+        
                     nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
                     nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
                     grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
                     } else if (grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
+                        
                         nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
                         nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
                         grafoNuevo.agregarNodo(nodoDestino->estacion);
                         //cout<<"entrealsegundo"<<endl;
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
+                     
                     } else if (!grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
+                        
                         nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
                         nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
                         grafoNuevo.agregarNodo(nodoOrigen->estacion);
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
+                        
                     } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {           
+                        
+                      
                         nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
                         nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
                         //cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
                         grafoNuevo.agregarNodo(nodoOrigen->estacion);
                         grafoNuevo.agregarNodo(nodoDestino->estacion);
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
+                       
                     }                                        
                 }
             }
         }
-    archivo.close();        
+                    
+    delete nodoOrigen;
+    delete nodoDestino;
+    archivo.close();     
     }
     return grafoNuevo;
 }
