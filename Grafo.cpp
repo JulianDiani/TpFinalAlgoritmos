@@ -95,7 +95,6 @@ void Grafo::recorridoEnProfundidad(Nodo* origen) {
 
         if (visitados.find(actual) == visitados.end()) {
             visitados.insert(actual);
-            //cout << "Visited node: " << actual->estacion->getCodigo() << endl;
             vector<Nodo*> adyacentes = getAdyacencia(actual);
             for (Nodo* adyacente : adyacentes) {
                 pila.push(adyacente);
@@ -143,7 +142,6 @@ unordered_map<string, int> Grafo::dijkstraPorCosto(Nodo* nodoInicial) {
             // cout<<"nueva distancia: "<<nuevaDistancia<<endl;
             // cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;
             if (nuevaDistancia < distancias[arista->destino->estacion->getCodigo()]) {
-                // cout << "Updating distance of node " << arista->destino->estacion->getCodigo() << " from " << distancias[arista->destino->estacion->getCodigo()] << " to " << nuevaDistancia << endl;
                 distancias[arista->destino->estacion->getCodigo()] = nuevaDistancia;
                 cola.push({arista->destino, nuevaDistancia});
             }
@@ -160,7 +158,7 @@ void Grafo::mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codi
         destinosDisponibles = dijkstraPorCosto(origen);  
         for (auto destinos : destinosDisponibles){
             if (destinos.first == codigoDestino && destinos.second != 2147483647) {
-                cout << "El costo para llegar de " << origen -> estacion -> getCodigo() << " a " << codigoDestino << " es " << destinos.second << endl;
+                cout << "El costo minimo para llegar de " << origen -> estacion -> getCodigo() << " a " << codigoDestino << " es " << destinos.second << endl;
                 encontroDestino = true;
             }
         }
@@ -196,7 +194,6 @@ unordered_map<string, double> Grafo::dijkstraPorTiempo(Nodo* nodoInicial) {
             // cout<<"nueva distancia: "<<nuevaDistancia<<endl;
             // cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;
             if (nuevoTiempoDeViaje < distancias[arista->destino->estacion->getCodigo()]) {
-                // cout << "Updating distance of node " << arista->destino->estacion->getCodigo() << " from " << distancias[arista->destino->estacion->getCodigo()] << " to " << nuevaDistancia << endl;
                 distancias[arista->destino->estacion->getCodigo()] = nuevoTiempoDeViaje;
                 cola.push({arista->destino, nuevoTiempoDeViaje});
             }
@@ -213,7 +210,7 @@ void Grafo::mostrarDestinosDisponiblesPorTiempo (string codigoOrigen, string cod
         destinosDisponibles = dijkstraPorTiempo(origen);    
         for (auto destinos : destinosDisponibles){
             if (destinos.first == codigoDestino && destinos.second != 2147483647) {
-                cout << "El costo para llegar de " << origen -> estacion -> getCodigo() << " a " << codigoDestino << " es " << destinos.second << endl;
+                cout << "El costo minimo por tiempo para llegar de " << origen -> estacion -> getCodigo() << " a " << codigoDestino << " es " << destinos.second << endl;
                 encontroDestino = true;
             }
         }
