@@ -119,21 +119,10 @@ struct NodoDistanciaHoras {
     }
 };
 
-struct NodoExtra {
-    string nodoOrigen;
-    string nodoDestino;
-    int coste;
-    bool operator<(const NodoExtra& other) const {
-        return coste > other.coste;
-    }
-};
-
 //Dijkstra por costo
 unordered_map<string, int> Grafo::dijkstraPorCosto(Nodo* nodoInicial, string codigoDestino) {
     unordered_map<string, int> distancias;
     priority_queue<NodoDistancia> cola;
-    priority_queue<NodoExtra> cola2;
-
     for (const auto& nodo : nodos) {
         distancias[nodo->estacion->getCodigo()] = numeric_limits<int>::max();
     }
@@ -149,7 +138,7 @@ unordered_map<string, int> Grafo::dijkstraPorCosto(Nodo* nodoInicial, string cod
         for (const auto& arista : getAristas(actual.nodo)) {
             int nuevaDistancia = distancias[actual.nodo->estacion->getCodigo()] + arista->costoDeViaje;
             if (codigoDestino == arista->destino->estacion->getCodigo()){
-            cout << "El costo para llegar de " << actual.nodo->estacion->getCodigo()<< " a " << arista->destino->estacion->getCodigo() << " es de " << nuevaDistancia <<endl;
+            cout << "La conexion posible desde " << actual.nodo->estacion->getCodigo()<< " hacia " << arista->destino->estacion->getCodigo() << " tiene como costo: " << nuevaDistancia <<endl;
             }
             if (nuevaDistancia < distancias[arista->destino->estacion->getCodigo()]) {
                 distancias[arista->destino->estacion->getCodigo()] = nuevaDistancia;
@@ -183,16 +172,13 @@ void Grafo::mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codi
 unordered_map<string, double> Grafo::dijkstraPorTiempo(Nodo* nodoInicial,string codigoDestino) {
     unordered_map<string, double> distancias;
     priority_queue<NodoDistanciaHoras> cola;
-    //cout << "MAXIMO NUMERO EN DOBLE: " <<numeric_limits<double>::max() << endl;
-
+    
     for (const auto& nodo : nodos) {
         distancias[nodo->estacion->getCodigo()] = numeric_limits<double>::max();
     }
 
     distancias[nodoInicial->estacion->getCodigo()] = 0.0;
-
     cola.push({nodoInicial, 0.0});
-
     while (!cola.empty()) {
         NodoDistanciaHoras actual = cola.top();
         cola.pop();
@@ -203,7 +189,7 @@ unordered_map<string, double> Grafo::dijkstraPorTiempo(Nodo* nodoInicial,string 
         for (const auto& arista : getAristas(actual.nodo)) {
             double nuevoTiempoDeViaje = distancias[actual.nodo->estacion->getCodigo()] + arista->horasViaje;
             if (codigoDestino == arista->destino->estacion->getCodigo()){
-            cout << "El costo en tiempo para llegar de " << actual.nodo->estacion->getCodigo()<< " a " << arista->destino->estacion->getCodigo() << " es de " << nuevoTiempoDeViaje <<endl;
+            cout << "La conexion posible desde " << actual.nodo->estacion->getCodigo()<< " hacia " << arista->destino->estacion->getCodigo() << " y su tiempo de viaje es " << nuevoTiempoDeViaje <<endl;
             }
             // cout<<"nueva distancia: "<<nuevaDistancia<<endl;
             // cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;

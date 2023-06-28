@@ -34,6 +34,14 @@ bool noEstaOcupado (int posicion){
     return tablaHashing[posicion].getCodigo().empty();
 }
 
+string convertirAMayusculas(const string& str) {
+    string resultado = str;
+    for (char& c : resultado) {
+        c = toupper(c);
+    }
+    return resultado;
+}
+
 char deseaContinuar() {
     char dato;
     cout << "Si desea continuar ingrese cualquier dato." << endl;
@@ -141,6 +149,7 @@ void darDeAltaEstacion() {
         if (!verificarSalir(codigo)){
             break;
         }
+        codigo = convertirAMayusculas(codigo);
         estacionNueva.setCodigo(codigo);
         cout << "Ingrese el nombre: " << endl;
         cin >> nombre;
@@ -235,7 +244,8 @@ void buscarEstacionPorCodigo() {
         cin>>codigo;
     }
     if (verificarSalir(codigo)){
-        buscarEstacion(codigo, tamanioDeTabla);
+        string codigoMayus = convertirAMayusculas(codigo);        
+        buscarEstacion(codigoMayus, tamanioDeTabla);
     }
 }
 
@@ -348,8 +358,6 @@ Grafo cargarViajesInicialesEnGrafo() {
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
                         
                     } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {           
-                        
-                      
                         nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
                         nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
                         //cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
@@ -382,7 +390,6 @@ void mostrarEstaciones(){
 void busquedaGrafoPorCosto(Grafo grafo){
     string codigoEstacionOrigen;
     string codigoEstacionDestino;
-
     cout<<"Debera ingresar una estacion de origen y destino, para calcular el tiempo que tardaria"<<endl;
     cout<<"Ingrese el codigo de la estacion origen: "<<endl;
     cin>>codigoEstacionOrigen;
@@ -391,6 +398,7 @@ void busquedaGrafoPorCosto(Grafo grafo){
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigoEstacionOrigen;
     }
+    codigoEstacionOrigen = convertirAMayusculas(codigoEstacionOrigen);
     
     cout<<"Ingrese el codigo de la estacion destino: "<<endl;
     cin>>codigoEstacionDestino;
@@ -399,6 +407,8 @@ void busquedaGrafoPorCosto(Grafo grafo){
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigoEstacionDestino;
     }
+    codigoEstacionDestino = convertirAMayusculas(codigoEstacionDestino);
+
     if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
         grafo.mostrarDestinosDisponiblesPorCosto(codigoEstacionOrigen,codigoEstacionDestino);
     }
@@ -415,8 +425,9 @@ void busquedaGrafoPorTiempo(Grafo grafo){
         cout<<"El codigo de la estacion origen debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: "<<endl;
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigoEstacionOrigen;
+        
     }
-    
+    codigoEstacionOrigen = convertirAMayusculas(codigoEstacionOrigen);
     cout<<"Ingrese el codigo de la estacion destino: "<<endl;
     cin>>codigoEstacionDestino;
     while(!verificarCodigo(codigoEstacionDestino) && verificarSalir(codigoEstacionDestino)) { 
@@ -424,6 +435,7 @@ void busquedaGrafoPorTiempo(Grafo grafo){
         cout<<"Escribi salir para terminar. "<<endl;
         cin>>codigoEstacionDestino;
     }
+    codigoEstacionDestino = convertirAMayusculas(codigoEstacionDestino);
     if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
         grafo.mostrarDestinosDisponiblesPorTiempo(codigoEstacionOrigen,codigoEstacionDestino);
     }
