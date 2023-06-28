@@ -12,15 +12,10 @@ void Grafo::agregarNodo(Estacion* estacion) {
     nodos.push_back(nodo);
 }
 
-
-
- void Grafo::agregarArista(Aristas* arista) {
+void Grafo::agregarArista(Aristas* arista) {
         aristas.push_back(arista);
-    }
-// void Grafo::agregarArista(Nodo* origen, Nodo* destino, int costoDeViaje, double horasViaje) {
-//     Aristas* arista = new Aristas(origen, destino, costoDeViaje, horasViaje);
-//     aristas.push_back(arista);
-// }
+}
+
 bool Grafo::encontreNodo(const string& codigo) {
     for (const auto& nodoPtr : nodos) {
         if (nodoPtr->estacion->getCodigo() == codigo) {
@@ -29,11 +24,6 @@ bool Grafo::encontreNodo(const string& codigo) {
     }
     return false;
 }
-
-
-
-
-
 
 Nodo* Grafo::encontreNodo2(string codigo){
     Nodo* salida=nullptr;
@@ -45,27 +35,43 @@ Nodo* Grafo::encontreNodo2(string codigo){
     return salida;
 }
 
-
 void Grafo::mostrarNodos() {
-    std::cout << "Nodos en el grafo:" << std::endl;
+    cout << "Nodos en el grafo:" << endl;
     for (const auto& nodo : nodos) {
-        std::cout << "Nodo " << nodo->estacion->getCodigo() << std::endl;
+        cout << "Nodo " << nodo->estacion->getCodigo() << endl;
     }
 }
-
 
 void Grafo::mostrarAristas() {
-    std::cout << "Aristas en el grafo:" << std::endl;
+    cout << "Aristas en el grafo:" << endl;
     for (const auto& nodo : nodos) {
-        std::cout << "Nodo " << nodo->estacion->getCodigo() << ":" << std::endl;
+        cout << "Nodo " << nodo->estacion->getCodigo() << ":" << endl;
         for (const auto& arista : aristas) {
             if (arista->origen->estacion->getCodigo() == nodo->estacion->getCodigo()) {
-                std::cout << " (Nodo origen: " << arista->origen->estacion->getCodigo() << " -> Nodo destino: " << arista->destino->estacion->getCodigo() << " -> Costo de viaje: " << arista->costoDeViaje << " -> Horas de viaje: " << arista->horasViaje << ")" << std::endl;
+                cout << " (Nodo origen: " << arista->origen->estacion->getCodigo() << " -> Nodo destino: " << arista->destino->estacion->getCodigo() << " -> Costo de viaje: " << arista->costoDeViaje << " -> Horas de viaje: " << arista->horasViaje << ")" << std::endl;
             }
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 }
+
+vector<Aristas*> Grafo::getAristas(Nodo* nodo) {
+    vector<Aristas*> aristasDeNodo;
+    for (const auto& arista : aristas) {
+        if (arista->origen->estacion->getCodigo() == nodo->estacion->getCodigo()) {
+            aristasDeNodo.push_back(arista);
+        }
+    }
+    //cout << "Aristas del nodo " << nodo->estacion->getCodigo() << ": ";
+    for (const auto& arista : aristasDeNodo) {
+        //cout << arista->origen->estacion->getCodigo() << " -> " << arista->destino->estacion->getCodigo() << " ";
+    }
+    //cout << endl;
+
+    return aristasDeNodo;
+}
+
+//Funciones para dijkstra
 
 vector<Nodo*> Grafo::getAdyacencia(Nodo* nodo) {
     vector<Nodo*> adyacentes;
@@ -78,25 +84,9 @@ vector<Nodo*> Grafo::getAdyacencia(Nodo* nodo) {
     
     return adyacentes;
 }
-vector<Aristas*> Grafo::getAristas(Nodo* nodo) {
-    vector<Aristas*> aristasDeNodo;
-    for (const auto& arista : aristas) {
-        if (arista->origen->estacion->getCodigo() == nodo->estacion->getCodigo()) {
-            aristasDeNodo.push_back(arista);
-        }
-    }
-
-    cout << "Aristas del nodo " << nodo->estacion->getCodigo() << ": ";
-    for (const auto& arista : aristasDeNodo) {
-        cout << arista->origen->estacion->getCodigo() << " -> " << arista->destino->estacion->getCodigo() << " ";
-    }
-    cout << endl;
-
-    return aristasDeNodo;
-}
 void Grafo::recorridoEnProfundidad(Nodo* origen) {
-    std::unordered_set<Nodo*> visitados;
-    std::stack<Nodo*> pila;
+    unordered_set<Nodo*> visitados;
+    stack<Nodo*> pila;
     pila.push(origen);
 
     while (!pila.empty()) {
@@ -105,8 +95,7 @@ void Grafo::recorridoEnProfundidad(Nodo* origen) {
 
         if (visitados.find(actual) == visitados.end()) {
             visitados.insert(actual);
-            cout << "Visited node: " << actual->estacion->getCodigo() << endl;
-
+            //cout << "Visited node: " << actual->estacion->getCodigo() << endl;
             vector<Nodo*> adyacentes = getAdyacencia(actual);
             for (Nodo* adyacente : adyacentes) {
                 pila.push(adyacente);
@@ -115,27 +104,25 @@ void Grafo::recorridoEnProfundidad(Nodo* origen) {
     }
 }
 
-
 struct NodoDistancia {
     Nodo* nodo;
     int distancia;
-
     bool operator<(const NodoDistancia& other) const {
         return distancia > other.distancia;
     }
 };
 
-std::unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
-    std::unordered_map<string, int> distancias;
+unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
+    unordered_map<string, int> distancias;
     for (const auto& nodo : nodos) {
-        distancias[nodo->estacion->getCodigo()] = std::numeric_limits<int>::max();
+        distancias[nodo->estacion->getCodigo()] = numeric_limits<int>::max();
     }
     distancias[nodoInicial->estacion->getCodigo()] = 0;
     for(auto distancia:distancias){
-        cout<<"CLAVES"<<distancia.first<<endl;
+        //cout<<"CLAVES"<<distancia.first<<endl;
     }
 
-    std::priority_queue<NodoDistancia> cola;
+    priority_queue<NodoDistancia> cola;
     cola.push({nodoInicial, 0});
 
     while (!cola.empty()) {
@@ -143,7 +130,7 @@ std::unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
         cola.pop();
 
         if (actual.distancia > distancias[actual.nodo->estacion->getCodigo()]) {
-            cout<<"emtre al if"<<endl;
+            //cout<<"emtre al if"<<endl;
             continue;
         }
 
@@ -162,6 +149,26 @@ std::unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
     return distancias;
 }
 
+void Grafo::mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codigoDestino){
+    Nodo* origen = encontreNodo2(codigoOrigen);
+    unordered_map<string, int> destinosDisponibles;
+    if (origen != nullptr){
+        destinosDisponibles = dijkstra(origen);
+    }
+    bool encontroDestino = false;
+    if (origen != nullptr){
+        for (auto destinos : destinosDisponibles){
+            if (destinos.first == codigoDestino && destinos.second != 2147483647) {
+                cout << "El costo para llegar de " << origen -> estacion -> getCodigo() << " a " << codigoDestino << " es " << destinos.second << endl;
+                encontroDestino = true;
+            }
+        }
+    }
+    if (encontroDestino == false) {
+        cout << "No se encontro ningun destino desde la estacion origen: " << codigoOrigen << " a la estacion destino: " << codigoDestino << endl;
+    }
+
+}
 
 
 

@@ -20,7 +20,7 @@ public:
     void agregarNodo(Estacion* estacion);
 
     bool encontreNodo(const string& codigo);
-    Nodo* encontreNodo2( string codigo);
+    Nodo* encontreNodo2(string codigo);
 
     // Función para agregar una arista al grafo
     void agregarArista(Aristas* arista);
@@ -37,6 +37,7 @@ public:
     vector<Aristas*> getAristas(Nodo* nodo);
     unordered_map<string, int> dijkstra(Nodo* nodoInicial);
     void recorridoEnProfundidad(Nodo* origen);
+    void mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codigoDestino);
 };
 
 #endif

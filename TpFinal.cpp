@@ -48,6 +48,7 @@ char deseaContinuar() {
         return '0';
     }
 }
+
 // Funciones de hashing
 // Hashing Modulo
 int funcionModulo(int key, int tamanio) {
@@ -87,7 +88,7 @@ int tratarColisionInsertar(int posicion, int tamanio) { //// REVISAR SI ANDA BIE
 int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
     int i = 1, salida = -1;
     int posicionAux = posicion + i;
-    Estacion datoAComparar;   // PREGUNTAR SI PODEMOS INSTANCIAR ESTACIONES ASI O SI QUIERE QUE SI O SI SEAN CON EL NEW.
+    Estacion datoAComparar; 
     while (!noEstaOcupado(posicionAux) && i < tamanio) {           
         datoAComparar = tablaHashing[posicionAux];
         //cout << datoAComparar.codigo << endl;
@@ -106,15 +107,13 @@ int tratarColisionBuscar(int posicion, int tamanio, string codigo) {
 void insertarEstacion(Estacion estacion, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(estacion.getCodigo(), tamanio);
     //cout << "Pos ini" << posicionInicial << endl;
-    if (noEstaOcupado(posicionInicial) || tablaHashing[posicionInicial].getCodigo()=="000000") {
-        //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
+    if (noEstaOcupado(posicionInicial) || tablaHashing[posicionInicial].getCodigo()=="000000") {    
         tablaHashing[posicionInicial] = estacion;
         //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Inicial: " << "Pos: " << posicionInicial << endl;
     }
     else {
         posicionColision = tratarColisionInsertar(posicionInicial, tamanio);
-        if (posicionColision != (-1)) {
-            //Sumar el codigo agregado al txt en esta iteracion o a armar lista que guarde los codigos para el mostrar despues
+        if (posicionColision != (-1)) {            
             tablaHashing[posicionColision] = estacion;
             //cout << "Soy la estacion: " << estacion.nombre << " Entre en pos Colision: " << "PosCos: " << posicionColision << endl;
         }
@@ -122,7 +121,7 @@ void insertarEstacion(Estacion estacion, int tamanio) {
             cout << "No se pudo insertar la estacion en ningun lugar." << endl;
         }
     }
-    cout << "Estacion registrada correctamente." << endl;
+    //cout << "Estacion registrada correctamente." << endl;
 }
 
 // Dar de alta con hashing
@@ -136,8 +135,7 @@ void darDeAltaEstacion() {
         cout << "Ingrese el CODIGO de 6 digitos de la estacion nueva: " << endl;
         cin >> codigo;
         while (!verificarCodigo(codigo) && verificarSalir(codigo)) {
-            cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;
-            //cout <<"Escribi salir para terminar. "<<endl;
+            cout << "El CODIGO debe ser de 6 digitos ej: ABC123, vuelve a intentarlo: " << endl;            
             cin >> codigo;
         }
         if (!verificarSalir(codigo)){
@@ -222,11 +220,9 @@ Estacion* retornarEstacion(string codigo, int tamanio) {
                 estacionAux = nullptr;
             }
         }
-    }
-    
+    }    
     return estacionAux;
 }
-
 
 void buscarEstacionPorCodigo() {  
     string codigo;
@@ -361,7 +357,7 @@ Grafo cargarViajesInicialesEnGrafo() {
     return grafoNuevo;
 }
 
-// mostrarEstaciones VIGENTE 
+// Mostras estaciones en tabla de hashing
 void mostrarEstaciones(){
     for (Estacion estacion : tablaHashing) {
         if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
@@ -369,8 +365,9 @@ void mostrarEstaciones(){
         }
     }
 }
+
 // Menu principal y funciones
-void busquedaGrafoPorCosto(){
+void busquedaGrafoPorCosto(Grafo grafo){
     string codigoEstacionOrigen;
     string codigoEstacionDestino;
 
@@ -391,7 +388,7 @@ void busquedaGrafoPorCosto(){
         cin>>codigoEstacionDestino;
     }
     if (verificarSalir(codigoEstacionOrigen) && verificarSalir(codigoEstacionDestino)){
-        cout << "Falta funcionalidad busqueda por costo en grafo"<< endl;
+        grafo.mostrarDestinosDisponiblesPorCosto(codigoEstacionOrigen,codigoEstacionDestino);
     }
 }
 
@@ -434,7 +431,7 @@ void eliminarEstacionPorCodigo(){
     }
 }
 
-void mostrarMenu()
+void mostrarMenu(Grafo grafo)
 {
     char opc;
     cout << "Bienvenido al Menu de opciones, elija la opcion: " << endl;
@@ -462,7 +459,7 @@ void mostrarMenu()
             opc = deseaContinuar();
         }
          else if (opc == '5'){        
-            busquedaGrafoPorCosto(); 
+            busquedaGrafoPorCosto(grafo);             
             cout << endl; 
             opc = deseaContinuar();                      
         }
@@ -487,7 +484,7 @@ void mostrarMenu()
 
 int main() {   
     cargarEstacionesIniciales();
-    Grafo prueba=cargarViajesInicialesEnGrafo();
+    Grafo grafoInicial = cargarViajesInicialesEnGrafo();
     //for(int i=0;i<vectorViajes.size();i++){
     //    cout<<vectorViajes[i].getCodigoDestino()<<endl;
     //}
@@ -500,31 +497,31 @@ int main() {
     
     // cout<<"Pase"<<endl;
     
-    // prueba=generarGrafoPesado(vectorViajes);
+    // grafoInicial=generarGrafoPesado(vectorViajes);
     // cout<<"Pase2"<<endl;
-    prueba.mostrarNodos();
-    prueba.mostrarAristas();
-    Nodo* nodoAProbar=prueba.encontreNodo2("COR002");
-    Nodo* nodoAProbar2=prueba.encontreNodo2("SAL002");
-    vector<Nodo*> vecNodos=prueba.getAdyacencia(nodoAProbar);
-     for( auto nodo : vecNodos){
-         cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
-     }
-    prueba.recorridoEnProfundidad(nodoAProbar);
+//     grafoInicial.mostrarNodos();
+//     grafoInicial.mostrarAristas();
+//     Nodo* nodoAProbar=grafoInicial.encontreNodo2("COR002");
+//     Nodo* nodoAProbar2=grafoInicial.encontreNodo2("SAL002");
+//     vector<Nodo*> vecNodos=grafoInicial.getAdyacencia(nodoAProbar);
+//      for( auto nodo : vecNodos){
+//          cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
+//      }
+//     grafoInicial.recorridoEnProfundidad(nodoAProbar);
 
 
-//Nodo* nodoInicial = ...; // Pointer to the initial node
-std::unordered_map<string, int> distancias = prueba.dijkstra(nodoAProbar);
+// //Nodo* nodoInicial = ...; // Pointer to the initial node
+// std::unordered_map<string, int> distancias = grafoInicial.dijkstra(nodoAProbar);
 
 // Check the distances
-for (const auto& elemento : distancias) {
-    string nodo = elemento.first;
-    int distancia = elemento.second;
-    cout << "Distance from " << nodoAProbar->estacion->getCodigo() << " to " << nodo << ": " << distancia << endl;
-}
+// for (const auto& elemento : distancias) {
+//     string nodo = elemento.first;
+//     int distancia = elemento.second;
+//     cout << "Distance from " << nodoAProbar->estacion->getCodigo() << " to " << nodo << ": " << distancia << endl;
+// }
 
 
-    // unordered_map<Nodo*, int> pruebaDij = prueba.dijkstra(nodoAProbar);
+    // unordered_map<Nodo*, int> pruebaDij = grafoInicial.dijkstra(nodoAProbar);
     // for (const auto& elemento : pruebaDij) {
     //     Nodo* nodo = elemento.first;
     //     int distancia = elemento.second;
@@ -539,7 +536,7 @@ for (const auto& elemento : distancias) {
     //camionPrueba.setNombreChofer("Pedro");
     //camionPrueba.setLitrosDeCombustible(2400.0);
     //cout <<"Camion nombre: " <<camionPrueba.getNombreChofer() <<" Camion litros: " <<camionPrueba.getLitrosCombustible()<<endl;
-    mostrarMenu();
+    mostrarMenu(grafoInicial);
     return 0;
         
 }
