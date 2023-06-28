@@ -1,5 +1,9 @@
 #include "Grafo.h"
 #include<unordered_set>
+#include <stack>
+#include <queue>
+#include <unordered_map>
+#include <limits>
 
 using namespace std;
 
@@ -74,58 +78,43 @@ vector<Nodo*> Grafo::getAdyacencia(Nodo* nodo) {
     
     return adyacentes;
 }
-vector<Aristas*> Grafo::getAristas(Nodo* nodo){  //Devuelve un vector con todas las aristas del nodo.
+vector<Aristas*> Grafo::getAristas(Nodo* nodo) {
     vector<Aristas*> aristasDeNodo;
     for (const auto& arista : aristas) {
         if (arista->origen->estacion->getCodigo() == nodo->estacion->getCodigo()) {
             aristasDeNodo.push_back(arista);
         }
     }
-    
+
+    cout << "Aristas del nodo " << nodo->estacion->getCodigo() << ": ";
+    for (const auto& arista : aristasDeNodo) {
+        cout << arista->origen->estacion->getCodigo() << " -> " << arista->destino->estacion->getCodigo() << " ";
+    }
+    cout << endl;
+
     return aristasDeNodo;
 }
+void Grafo::recorridoEnProfundidad(Nodo* origen) {
+    std::unordered_set<Nodo*> visitados;
+    std::stack<Nodo*> pila;
+    pila.push(origen);
 
+    while (!pila.empty()) {
+        Nodo* actual = pila.top();
+        pila.pop();
 
-int Grafo::getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2){
-    for(auto arista: aristas){
-        if(arista->origen->estacion->getCodigo()==nodo1->estacion->getCodigo() && arista->destino->estacion->getCodigo()==nodo2->estacion->getCodigo()){
-            return arista->costoDeViaje;
-        }    
-    }
-    return 0;
-}
-double Grafo::getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2){
-   for(auto arista: aristas){
-        if(arista->origen->estacion->getCodigo()==nodo1->estacion->getCodigo() && arista->destino->estacion->getCodigo()==nodo2->estacion->getCodigo()){
-            return arista->horasViaje;
-        }    
-    }
-    return 0;
-}
-vector<Aristas*>Grafo:: getAristas2() {
-        return aristas;
-    }
-bool Grafo::hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados) {
-    if (nodoActual == nodoDestino) {
-        return true;
-    }
+        if (visitados.find(actual) == visitados.end()) {
+            visitados.insert(actual);
+            cout << "Visited node: " << actual->estacion->getCodigo() << endl;
 
-    visitados.insert(nodoActual);
-
-    vector<Nodo*> adyacentes = getAdyacencia(nodoActual);
-    for (Nodo* adyacente : adyacentes) {
-        if (visitados.find(adyacente) == visitados.end()) {
-            if (hayCaminoDFS(adyacente, nodoDestino, visitados)) {
-                return true;
+            vector<Nodo*> adyacentes = getAdyacencia(actual);
+            for (Nodo* adyacente : adyacentes) {
+                pila.push(adyacente);
             }
         }
     }
-
-    return false;
 }
-#include <queue>
-#include <unordered_map>
-#include <limits>
+
 
 struct NodoDistancia {
     Nodo* nodo;
@@ -136,12 +125,15 @@ struct NodoDistancia {
     }
 };
 
-std::unordered_map<Nodo*, int> Grafo::dijkstra(Nodo* nodoInicial) {
-    std::unordered_map<Nodo*, int> distancias;
+std::unordered_map<string, int> Grafo::dijkstra(Nodo* nodoInicial) {
+    std::unordered_map<string, int> distancias;
     for (const auto& nodo : nodos) {
-        distancias[nodo] = std::numeric_limits<int>::max();
+        distancias[nodo->estacion->getCodigo()] = std::numeric_limits<int>::max();
     }
-    distancias[nodoInicial] = 0;
+    distancias[nodoInicial->estacion->getCodigo()] = 0;
+    for(auto distancia:distancias){
+        cout<<"CLAVES"<<distancia.first<<endl;
+    }
 
     std::priority_queue<NodoDistancia> cola;
     cola.push({nodoInicial, 0});
@@ -150,14 +142,18 @@ std::unordered_map<Nodo*, int> Grafo::dijkstra(Nodo* nodoInicial) {
         NodoDistancia actual = cola.top();
         cola.pop();
 
-        if (actual.distancia > distancias[actual.nodo]) {
+        if (actual.distancia > distancias[actual.nodo->estacion->getCodigo()]) {
+            cout<<"emtre al if"<<endl;
             continue;
         }
 
         for (const auto& arista : getAristas(actual.nodo)) {
-            int nuevaDistancia = distancias[actual.nodo] + arista->costoDeViaje;
-            if (nuevaDistancia < distancias[arista->destino]) {
-                distancias[arista->destino] = nuevaDistancia;
+            int nuevaDistancia = distancias[actual.nodo->estacion->getCodigo()] + arista->costoDeViaje;
+            cout<<"nueva distancia: "<<nuevaDistancia<<endl;
+            cout<<"Distancia destino: "<<distancias[arista->destino->estacion->getCodigo()]<<"NODO"<<arista->destino->estacion->getCodigo()<<endl;
+            if (nuevaDistancia < distancias[arista->destino->estacion->getCodigo()]) {
+                cout << "Updating distance of node " << arista->destino->estacion->getCodigo() << " from " << distancias[arista->destino->estacion->getCodigo()] << " to " << nuevaDistancia << endl;
+                distancias[arista->destino->estacion->getCodigo()] = nuevaDistancia;
                 cola.push({arista->destino, nuevaDistancia});
             }
         }
@@ -165,6 +161,11 @@ std::unordered_map<Nodo*, int> Grafo::dijkstra(Nodo* nodoInicial) {
 
     return distancias;
 }
+
+
+
+
+
 
 
 

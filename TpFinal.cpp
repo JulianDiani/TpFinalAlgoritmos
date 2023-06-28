@@ -305,47 +305,6 @@ void cargarEstacionesIniciales() {
         cout << "No se pudo abrir el archivo." << endl;
     }
 }
-//DEPRECADO CARGAR VIAJES INICIALES
-void cargarViajesIniciales() {
-    ifstream archivo(archivoViajes);
-    bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
-    if (archivo.is_open()) {
-        string linea;
-        while (getline(archivo, linea)) {
-            istringstream iss(linea);
-            string codigoOrigen;
-            string codigoDestino;
-            int costoViaje;
-            double horasViaje;
-            Viaje viajeNuevo;
-            cargarEnGrafo = true;
-            
-           
-                if (iss >> codigoOrigen >> codigoDestino >> costoViaje >> horasViaje) {
-                    if (!verificarCodigo(codigoOrigen)||retornarEstacion(codigoOrigen,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
-                        cout<<"La estacion origen no se puede referenciar porque no existe estacion con ese codigo "<<endl;
-                        cargarEnGrafo = false;
-                    }
-                    if (!verificarCodigo(codigoDestino)||retornarEstacion(codigoDestino,tamanioDeTabla)==nullptr){ //Si no esta en la tabla de hasing) { 
-                        cout<<"La estacion destino no se puede referenciar porque no existe estacion con ese codigo "<<endl;
-                        cargarEnGrafo = false;
-                    }
-                    if (cargarEnGrafo) {
-                        viajeNuevo.setCodigoPartida(codigoOrigen);
-                        viajeNuevo.setCodigoDestino(codigoDestino);
-                        viajeNuevo.setCostoViaje(costoViaje);
-                        viajeNuevo.setHorasViaje(horasViaje);
-                        vectorViajes.push_back(viajeNuevo);    
-                    }
-                
-            }
-        }
-        archivo.close();
-    }
-    else {
-        cout << "No se pudo abrir el archivo." << endl;
-    }
-}
 
 //VIGENTE CARGAR VIAJES INICIALES
 Grafo cargarViajesInicialesEnGrafo() {
@@ -413,76 +372,6 @@ void mostrarEstaciones(){
         }
     }
 }
-
-//Grafo pesado original "generar"
-// Grafo generarGrafoPesado(const vector<Viaje>& vectorViajes) {
-//     Grafo grafoViajes;
-//     cout<<"Ya arme el grafo vacio"<<endl;
-//     Nodo* nodoOrigen;
-//     Nodo* nodoDestino;
-//     for (const auto& viaje : vectorViajes) {
-//             if (grafoViajes.encontreNodo(viaje.getCodigoPartida()) && grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
-//             nodoOrigen=grafoViajes.encontreNodo2(viaje.getCodigoPartida());
-//             nodoDestino=grafoViajes.encontreNodo2(viaje.getCodigoDestino());
-//             grafoViajes.agregarArista(nodoOrigen, nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje());
-//             cout<<"Entre al primero con codigo de partida: "<<nodoOrigen->estacion->getCodigo()<<endl;
-//         } else if (grafoViajes.encontreNodo(viaje.getCodigoPartida()) && !grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
-//             nodoOrigen=grafoViajes.encontreNodo2(viaje.getCodigoPartida());
-//             nodoDestino = new Nodo(retornarEstacion(viaje.getCodigoDestino(), tamanioDeTabla));
-//             grafoViajes.agregarNodo(nodoDestino->estacion);
-//             cout<<"entrealsegundo"<<endl;
-//             grafoViajes.agregarArista(nodoOrigen, nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje());
-//         } else if (!grafoViajes.encontreNodo(viaje.getCodigoPartida()) && grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
-//             nodoOrigen = new Nodo(retornarEstacion(viaje.getCodigoPartida(), tamanioDeTabla));
-//             nodoDestino=grafoViajes.encontreNodo2(viaje.getCodigoDestino());
-//             grafoViajes.agregarNodo(nodoOrigen->estacion);
-//             grafoViajes.agregarArista(nodoOrigen, nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje());
-//         } else if(!grafoViajes.encontreNodo(viaje.getCodigoPartida()) && !grafoViajes.encontreNodo(viaje.getCodigoDestino())) {
-           
-//             nodoOrigen = new Nodo(retornarEstacion(viaje.getCodigoPartida(), tamanioDeTabla));
-//             nodoDestino = new Nodo(retornarEstacion(viaje.getCodigoDestino(), tamanioDeTabla));
-//              cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
-//             grafoViajes.agregarNodo(nodoOrigen->estacion);
-//             grafoViajes.agregarNodo(nodoDestino->estacion);
-//             grafoViajes.agregarArista(new Aristas( nodoDestino, viaje.getCostoViaje(), viaje.getHorasViaje()));
-//         }        
-//     }    
-//     return grafoViajes;
-// }
-
-
-//const int INFINITO = std::numeric_limits<int>::max();
-
-// void dijkstra(const Grafo& G, int nodo_fuente) {
-//     int num_vertices = G.getNumVertices();
-//     std::vector<int> distancia(num_vertices, INFINITO);
-//     std::vector<int> padre(num_vertices, -1);
-//     std::vector<bool> visto(num_vertices, false);
-    
-//     distancia[nodo_fuente] = 0;
-//     std::priority_queue<std::pair<int, int>, std::vector<std::pair<int, int>>, std::greater<std::pair<int, int>>> cola;
-//     cola.push(std::make_pair(0, nodo_fuente));
-    
-//     while (!cola.empty()) {
-//         int u = cola.top().second;
-//         cola.pop();
-        
-//         visto[u] = true;
-        
-//         for (const auto& v : G.getAdyacencia(u)) {
-//             if (!visto[v]) {
-//                 int peso_uv = G.getPeso(u, v);
-                
-//                 if (distancia[v] > distancia[u] + peso_uv) {
-//                     distancia[v] = distancia[u] + peso_uv;
-//                     padre[v] = u;
-//                     cola.push(std::make_pair(distancia[v], v));
-//                 }
-//             }
-//         }
-//     }
-// }
-
 // Menu principal y funciones
 void busquedaGrafoPorCosto(){
     string codigoEstacionOrigen;
@@ -618,29 +507,32 @@ int main() {
     // cout<<"Pase2"<<endl;
     prueba.mostrarNodos();
     prueba.mostrarAristas();
-    Nodo* nodoAProbar=prueba.encontreNodo2("BAS001");
+    Nodo* nodoAProbar=prueba.encontreNodo2("COR002");
     Nodo* nodoAProbar2=prueba.encontreNodo2("SAL002");
     vector<Nodo*> vecNodos=prueba.getAdyacencia(nodoAProbar);
      for( auto nodo : vecNodos){
          cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
      }
+    prueba.recorridoEnProfundidad(nodoAProbar);
 
-    int costoEntreNodos=prueba.getCostoEntre_Y_(nodoAProbar,nodoAProbar2);
-    cout<<"el costo entre los nodos 1 y 2 es: "<<costoEntreNodos<<endl;
-    double horasEntreNodos=prueba.getHorasEntre_Y_(nodoAProbar,nodoAProbar2);
-    cout<<"las horas entre los nodos 1 y 2 es: "<<horasEntreNodos<<endl;
-    std::unordered_set<Nodo*> visitados;
-    if(prueba.hayCaminoDFS(nodoAProbar,nodoAProbar2,visitados)){
-        cout<<"HAY CAMINO"<<endl;
-    }else{
-        cout<<"NO HAY CAMINO FLACO"<<endl;
-    }
-    unordered_map<Nodo*, int> pruebaDij = prueba.dijkstra(nodoAProbar);
-    for (const auto& elemento : pruebaDij) {
-        Nodo* nodo = elemento.first;
-        int distancia = elemento.second;
-        cout << "Nodo: " << nodo->estacion->getCodigo() << " - Distancia: " << distancia << endl;
-    }
+
+//Nodo* nodoInicial = ...; // Pointer to the initial node
+std::unordered_map<string, int> distancias = prueba.dijkstra(nodoAProbar);
+
+// Check the distances
+for (const auto& elemento : distancias) {
+    string nodo = elemento.first;
+    int distancia = elemento.second;
+    cout << "Distance from " << nodoAProbar->estacion->getCodigo() << " to " << nodo << ": " << distancia << endl;
+}
+
+
+    // unordered_map<Nodo*, int> pruebaDij = prueba.dijkstra(nodoAProbar);
+    // for (const auto& elemento : pruebaDij) {
+    //     Nodo* nodo = elemento.first;
+    //     int distancia = elemento.second;
+    //     cout << "Nodo: " << nodo->estacion->getCodigo() << " - Distancia: " << distancia << endl;
+    // }
 
     
     //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);

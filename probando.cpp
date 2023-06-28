@@ -73,8 +73,8 @@ int main() {
 
     // Crea las aristas
     nodoA->adyacentes.insert(nodoB);
-    nodoB->adyacentes.insert(nodoC);
-    nodoC->adyacentes.insert(nodoD);
+    nodoA->adyacentes.insert(nodoD);
+    //nodoC->adyacentes.insert(nodoD);
     nodoD->adyacentes.insert(nodoA);
 
     // Crea el grafo

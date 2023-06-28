@@ -35,10 +35,8 @@ public:
     vector<Nodo*> getAdyacencia(Nodo* nodo);
     int getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2);
     vector<Aristas*> getAristas(Nodo* nodo);
-    double getHorasEntre_Y_(Nodo* nodo1,Nodo* nodo2);
-    vector<Aristas*>getAristas2();
-    bool hayCaminoDFS(Nodo* nodoActual, Nodo* nodoDestino, std::unordered_set<Nodo*>& visitados);
-    std::unordered_map<Nodo*, int> dijkstra(Nodo* nodoInicial);
+    unordered_map<string, int> dijkstra(Nodo* nodoInicial);
+    void recorridoEnProfundidad(Nodo* origen);
 };
 
 #endif
