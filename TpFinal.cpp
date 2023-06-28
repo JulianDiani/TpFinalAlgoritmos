@@ -208,7 +208,6 @@ void buscarEstacion(string codigo, int tamanio){
 // Buscar estacion con hashing devuelve estacion validar contra empty
 Estacion* retornarEstacion(string codigo, int tamanio) {
     int posicionColision, posicionInicial = funcionDeHashing(codigo, tamanio);
-    
     Estacion* estacionAux = nullptr;
     
     if (!noEstaOcupado(posicionInicial)) {
@@ -221,7 +220,7 @@ Estacion* retornarEstacion(string codigo, int tamanio) {
                 estacionAux = nullptr;
             }
         }
-    }   
+    }    
     return estacionAux;
 }
 
@@ -271,7 +270,7 @@ void eliminarEstacion(string codigo, int tamanio) {
 
 // Cargar txts estaciones - viajes.
 void cargarEstacionesIniciales() {
-    ifstream archivo(archivoEstaciones); 
+    ifstream archivo(archivoEstaciones); // Reemplaza "datos.txt" por el nombre de tu archivo
     if (archivo.is_open()) {
         string linea;
         while (getline(archivo, linea)) {
@@ -304,10 +303,10 @@ void cargarEstacionesIniciales() {
 //VIGENTE CARGAR VIAJES INICIALES
 Grafo cargarViajesInicialesEnGrafo() {
     ifstream archivo(archivoViajes);
-    bool cargarEnGrafo=true; 
+    bool cargarEnGrafo=true; // Reemplaza "datos.txt" por el nombre de tu archivo
     Grafo grafoNuevo;
-    Nodo* nodoOrigen;
-    Nodo* nodoDestino;
+    Nodo* nodoOrigen=new Nodo(nullptr);
+    Nodo* nodoDestino=new Nodo(nullptr);
     if (archivo.is_open()) {
         string linea;
         while (getline(archivo, linea)) {
@@ -328,42 +327,32 @@ Grafo cargarViajesInicialesEnGrafo() {
                 }
                 if (cargarEnGrafo) {
                     if (grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
-        
                     nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
                     nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
                     grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
                     } else if (grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {
-                        
                         nodoOrigen=grafoNuevo.encontreNodo2(codigoOrigen);
                         nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
                         grafoNuevo.agregarNodo(nodoDestino->estacion);
                         //cout<<"entrealsegundo"<<endl;
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
-                     
                     } else if (!grafoNuevo.encontreNodo(codigoOrigen) && grafoNuevo.encontreNodo(codigoDestino)) {
-                        
                         nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
                         nodoDestino=grafoNuevo.encontreNodo2(codigoDestino);
                         grafoNuevo.agregarNodo(nodoOrigen->estacion);
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
-                        
                     } else if(!grafoNuevo.encontreNodo(codigoOrigen) && !grafoNuevo.encontreNodo(codigoDestino)) {           
-                        
-                      
                         nodoOrigen = new Nodo(retornarEstacion(codigoOrigen, tamanioDeTabla));
                         nodoDestino = new Nodo(retornarEstacion(codigoDestino, tamanioDeTabla));
                         //cout<<"entre al cuarto con codigo"<<"partida"<<nodoOrigen->estacion->getCodigo()<<"Dest:"<<nodoDestino->estacion->getCodigo()<<endl;
                         grafoNuevo.agregarNodo(nodoOrigen->estacion);
                         grafoNuevo.agregarNodo(nodoDestino->estacion);
                         grafoNuevo.agregarArista(new Aristas(nodoOrigen, nodoDestino, costoViaje, horasViaje));
-                       
                     }                                        
                 }
             }
-        }           
-    delete nodoOrigen;
-    delete nodoDestino;
-    archivo.close();     
+        }
+    archivo.close();        
     }
     return grafoNuevo;
 }
@@ -373,7 +362,6 @@ void mostrarEstaciones(){
     for (Estacion estacion : tablaHashing) {
         if(estacion.getCodigo()!="000000" && estacion.getCodigo()!=""){
             estacion.getDatosEstacion();
-            cout<<endl;
         }
     }
 }
@@ -443,11 +431,9 @@ void eliminarEstacionPorCodigo(){
     }
 }
 
-void mostrarMenu()
+void mostrarMenu(Grafo grafo)
 {
     char opc;
-    cargarEstacionesIniciales();
-    Grafo grafoInicial = cargarViajesInicialesEnGrafo();
     cout << "Bienvenido al Menu de opciones, elija la opcion: " << endl;
     while (opc != 'n') {
         cout << "1-Consultar informacion de una estacion en particular \n2-Dar de alta una nueva estacion \n3-Dar de baja estaciones \n4-Mostrar todas las estaciones \n5-Busqueda de viaje por costo \n6-Busqueda de viaje por tiempo \n7-Salir" << endl;
@@ -469,15 +455,16 @@ void mostrarMenu()
         }
         else if (opc == '4'){
             mostrarEstaciones();
+            cout << endl; 
             opc = deseaContinuar();
         }
          else if (opc == '5'){        
-            busquedaGrafoPorCosto(grafoInicial);             
+            busquedaGrafoPorCosto(grafo);             
             cout << endl; 
             opc = deseaContinuar();                      
         }
          else if (opc == '6'){
-            busquedaGrafoPorTiempo(grafoInicial); 
+            busquedaGrafoPorTiempo(grafo); 
             cout << endl;            
             opc = deseaContinuar();                      
         }
@@ -489,9 +476,67 @@ void mostrarMenu()
     }
     cout << "Gracias por utilizar nuestro sistema!" << endl;
 }
+// PREGUNTAS: ¿Como recorremos el Grafo?
+// ¿Podemos hacer instancias de clase asi (Nodo(bla,bla,bla)) o tiene que ser con New?
+//¿Los nodos del grafo tienen que ser estaciones o no es necesario? 
+
+// COSAS QUE FALTAN: DIJKSTRA, RECORRER GRAFOS CORRECTAMENTE,VALIDACIONES DE CAMION SISTERNA, LIBERAR MEMORIA EN LOS NEW Y PASAR HASH A CLASES.
 
 int main() {   
-    mostrarMenu();
+    cargarEstacionesIniciales();
+    Grafo grafoInicial = cargarViajesInicialesEnGrafo();
+    //for(int i=0;i<vectorViajes.size();i++){
+    //    cout<<vectorViajes[i].getCodigoDestino()<<endl;
+    //}
+    //for(int i=0;i<vectorViajes.size();i++){
+    //    cout<<vectorViajes[i].getCodigoPartida();
+    //}
+    // cout<<"lalala";
+    // //Estacion* estacionPrueba=retornarEstacion("BAS001",tamanioDeTabla);
+    // cout<<"lalala"<<estacionPrueba->getCodigo();
+    
+    // cout<<"Pase"<<endl;
+    
+    // grafoInicial=generarGrafoPesado(vectorViajes);
+    // cout<<"Pase2"<<endl;
+//     grafoInicial.mostrarNodos();
+//     grafoInicial.mostrarAristas();
+//     Nodo* nodoAProbar=grafoInicial.encontreNodo2("COR002");
+//     Nodo* nodoAProbar2=grafoInicial.encontreNodo2("SAL002");
+//     vector<Nodo*> vecNodos=grafoInicial.getAdyacencia(nodoAProbar);
+//      for( auto nodo : vecNodos){
+//          cout<<"Adayacentes"<<nodo->estacion->getCodigo()<<endl;
+//      }
+//     grafoInicial.recorridoEnProfundidad(nodoAProbar);
+
+
+// //Nodo* nodoInicial = ...; // Pointer to the initial node
+// std::unordered_map<string, int> distancias = grafoInicial.dijkstra(nodoAProbar);
+
+// Check the distances
+// for (const auto& elemento : distancias) {
+//     string nodo = elemento.first;
+//     int distancia = elemento.second;
+//     cout << "Distance from " << nodoAProbar->estacion->getCodigo() << " to " << nodo << ": " << distancia << endl;
+// }
+
+
+    // unordered_map<Nodo*, int> pruebaDij = grafoInicial.dijkstra(nodoAProbar);
+    // for (const auto& elemento : pruebaDij) {
+    //     Nodo* nodo = elemento.first;
+    //     int distancia = elemento.second;
+    //     cout << "Nodo: " << nodo->estacion->getCodigo() << " - Distancia: " << distancia << endl;
+    // }
+
+    
+    //Estacion estacionAux = retornarEstacion("BAS001",tamanioDeTabla);
+    //cout <<"Estacion esta vacia?" << estacionAux.getCodigo() << endl;
+     
+    //Camion camionPrueba = Camion();
+    //camionPrueba.setNombreChofer("Pedro");
+    //camionPrueba.setLitrosDeCombustible(2400.0);
+    //cout <<"Camion nombre: " <<camionPrueba.getNombreChofer() <<" Camion litros: " <<camionPrueba.getLitrosCombustible()<<endl;
+    mostrarMenu(grafoInicial);
     return 0;
         
 }

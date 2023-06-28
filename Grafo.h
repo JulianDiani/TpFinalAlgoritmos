@@ -36,9 +36,9 @@ public:
     int getCostoEntre_Y_(Nodo* nodo1,Nodo* nodo2);
     vector<Aristas*> getAristas(Nodo* nodo);
     void recorridoEnProfundidad(Nodo* origen);
-    unordered_map<string, int> dijkstraPorCosto(Nodo* nodoInicial);
+    unordered_map<string, int> dijkstraPorCosto(Nodo* nodoInicial,string codigoDestino);
     void mostrarDestinosDisponiblesPorCosto (string codigoOrigen, string codigoDestino);
-    unordered_map<string, double> dijkstraPorTiempo(Nodo* nodoInicial);
+    unordered_map<string, double> dijkstraPorTiempo(Nodo* nodoInicial,string codigoDestino);
     void mostrarDestinosDisponiblesPorTiempo (string codigoOrigen, string codigoDestino);
 };
 
